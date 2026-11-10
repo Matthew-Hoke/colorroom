@@ -1,0 +1,1383 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src blob: data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'; worker-src blob:">
+  <meta name="theme-color" content="#f7f6f2">
+  <title>Colorroom 1.6 — Image Palette Studio</title>
+  <style>
+    :root { color-scheme: light; --paper: #f7f6f2; --white: #fffefa; --ink: #211d26; --muted: #635c69; --line: #dfdbe3; --accent: #5a3cb0; --tint: #eee8fa; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 15px/1.5 system-ui, sans-serif; }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    button:disabled, input:disabled, select:disabled { opacity: .5; cursor: default; }
+    button:focus-visible, input:focus-visible, select:focus-visible { outline: 3px solid #967be1; outline-offset: 3px; }
+    .wrap { width: min(1920px, calc(100% - 36px)); margin: 0 auto; }
+    header { border-bottom: 1px solid var(--line); }
+    .mast { display: flex; justify-content: space-between; align-items: center; min-height: 52px; gap: 12px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 760; font-size: 19px; letter-spacing: -.04em; }
+    .mark { width: 26px; height: 26px; border-radius: 8px; background: conic-gradient(from 35deg, #eec586 0 25%, #a58bd8 25% 50%, #6448ae 50% 75%, #33244d 75%); }
+    .badge { border: 1px solid var(--line); border-radius: 40px; padding: 5px 11px; font-size: 12px; color: var(--muted); white-space: nowrap; }
+    .badge::before { content: ''; display: inline-block; margin-right: 7px; width: 7px; height: 7px; border-radius: 50%; background: #60816c; vertical-align: 1px; }
+    .hero { display: grid; grid-template-columns: 1fr 1.1fr; align-items: center; gap: 18px; padding: 14px 0 10px; }
+    .eyebrow { margin: 0 0 4px; color: var(--accent); font-size: 10px; letter-spacing: .17em; font-weight: 800; text-transform: uppercase; }
+    h1, h2 { font-family: Georgia, serif; font-weight: 400; letter-spacing: -.045em; margin: 0; }
+    h1 { font-size: clamp(27px, 3vw, 40px); line-height: 1.05; }
+    h2 { font-size: clamp(21px, 1.8vw, 25px); line-height: 1.15; }
+    .intro { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+    .upload { display: flex; flex-wrap: wrap; align-items: center; gap: 7px 12px; border: 1px dashed #ad9bc9; border-radius: 12px; padding: 10px 12px; background: #f0ebfa; transition: background .15s, border-color .15s; }
+    .upload.drag { background: #e4d8fa; border-color: var(--accent); }
+    .upload svg { flex: 0 0 auto; color: var(--accent); }
+    .upload strong { display: block; }
+    .upload-copy { flex: 1 1 180px; }
+    .upload-actions { display: flex; flex-wrap: wrap; gap: 4px; }
+    .small { color: var(--muted); font-size: 12px; }
+    .upload .small { margin: 1px 0 0; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; min-height: 36px; padding: 7px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--white); color: var(--ink); font-size: 13px; font-weight: 650; }
+    .btn[hidden] { display: none; }
+    .btn:hover:not(:disabled) { background: var(--tint); }
+    .primary { color: white; background: var(--accent); border-color: var(--accent); }
+    .primary:hover:not(:disabled) { color: white; background: #472c96; }
+    .text-btn { border: 0; background: transparent; color: var(--accent); padding: 7px 12px; font-size: 13px; font-weight: 700; }
+    .status { margin: 0 0 8px; min-height: 18px; font-size: 12px; color: var(--muted); }
+    .status.error { color: #a12a45; }
+    .workspace { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .85fr) minmax(355px, 1.3fr); align-items: start; gap: 12px; }
+    .source-panel { position: sticky; top: 12px; }
+    .panel { min-width: 0; background: var(--white); border: 1px solid var(--line); border-radius: 13px; padding: 13px; }
+    .panel-head { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+    .panel-head p { margin: 5px 0 0; }
+    .preview { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: center; overflow: hidden; aspect-ratio: var(--preview-ratio, 16 / 9); min-height: 140px; max-height: 270px; border-radius: 10px; background: repeating-conic-gradient(#eeeaf0 0% 25%, #f8f6f8 0% 50%) 0 0 / 20px 20px; }
+    .preview img { width: 100%; height: 100%; object-fit: contain; }
+    .preview img.picking { cursor: crosshair; }
+    .preview [hidden] { display: none; }
+    .source-frame { position: relative; overflow: clip; overflow-clip-margin: 24px; }
+    .location-marker { position: absolute; z-index: 1; width: 32px; height: 32px; padding: 0; border: 3px solid white; border-radius: 50%; box-shadow: 0 0 0 2px #211d26, 0 2px 9px #211d2699; transform: translate(-50%, -50%); transition: transform .12s; }
+    .location-marker::after { content: '+'; position: absolute; inset: 0; display: grid; place-items: center; color: white; font-size: 18px; font-weight: 700; text-shadow: 0 0 3px black, 0 0 3px black; }
+    .location-marker:hover, .location-marker.emphasized { transform: translate(-50%, -50%) scale(1.6); z-index: 2; }
+    #related-marker { pointer-events: none; }
+    .inspection { margin-top: 10px; border: 1px solid var(--line); border-radius: 9px; padding: 8px; }
+    .inspection summary { cursor: pointer; font-size: 13px; font-weight: 700; }
+    .inspection .small { margin: 5px 0; }
+    .related-shades { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+    .inspection-row td { padding: 0 4px 8px; white-space: normal; }
+    .inspection-row .inspection { margin-top: 4px; background: #f5f0fa; }
+    .shade-locate { padding: 0; border: 0; border-radius: 5px; background: transparent; }
+    .shade-locate:hover { outline: 2px solid var(--accent); outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) { .location-marker { transition: none; } }
+    .meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 11px; }
+    .meta strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
+    .meta .small { white-space: nowrap; }
+    .options, .actions, .pager { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+    .options { margin-bottom: 11px; }
+    .option { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; }
+    .option[hidden] { display: none; }
+    #mode { min-width: 0; }
+    .recipe-note { margin: 0 0 10px; }
+    .picks { display: flex; align-items: center; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+    .picks:empty, .recipe-note:empty { display: none; }
+    .chip { display: inline-flex; align-items: center; gap: 5px; min-height: 26px; padding: 2px 6px; border: 1px solid var(--line); border-radius: 6px; background: var(--white); color: var(--ink); font-size: 11px; }
+    .chip:hover, .pick[aria-pressed=true], #pick-image[aria-pressed=true] { background: var(--tint); color: var(--accent); }
+    .chip .dot { width: 12px; height: 12px; border-radius: 3px; }
+    .role { align-self: center; padding: 0 3px 5px; color: var(--muted); font-size: 10px; }
+    .options label, .filters label { font-size: 12px; font-weight: 650; }
+    select, input[type=search], input[type=number] { min-height: 34px; border: 1px solid var(--line); border-radius: 8px; padding: 5px 8px; background: var(--white); color: var(--ink); }
+    .swatches { min-height: 96px; display: grid; grid-template-columns: repeat(auto-fit, minmax(max(64px, calc((100% - 30px) / 6)), 1fr)); grid-auto-rows: minmax(64px, auto); gap: 6px; }
+    .swatches:empty::after { grid-column: 1 / -1; content: attr(data-empty); align-self: center; text-align: center; color: var(--muted); }
+    .swatch { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 8px; padding: 0; background: var(--white); color: var(--ink); min-width: 0; overflow: hidden; }
+    .swatch:hover { border-color: var(--accent); }
+    .swatch[aria-expanded=true] { border-color: var(--accent); background: var(--tint); }
+    .paint { display: block; flex: 1; min-height: 35px; width: 100%; }
+    code { font-family: Consolas, 'Courier New', monospace; }
+    .swatch code { align-self: center; padding: 6px 0; font-size: 11px; white-space: nowrap; }
+    .swatch code::after { content: ' ▾'; color: var(--accent); font-size: 10px; }
+    .source-match { margin: 8px 0 0; color: var(--accent); }
+    .actions { margin-top: 11px; }
+    .inventory { align-self: start; }
+    .filters { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; margin-bottom: 10px; }
+    .filters input { width: 160px; }
+    .filters #page-limit { width: 70px; }
+    .list-help { margin: 6px 0 10px; }
+    .detail { background: #f5f0fa; border: 1px solid var(--line); border-radius: 10px; padding: 12px; margin: 0 0 13px; }
+    .detail-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 6px 12px; }
+    .detail-head label { font-weight: 700; }
+    .detail-head input { width: 115px; }
+    .detail p { margin: 4px 0 8px; }
+    .detail input[type=range] { display: block; width: 100%; margin: 8px 0 3px; accent-color: var(--accent); cursor: ew-resize; }
+    .detail-ends { display: flex; justify-content: space-between; gap: 8px; }
+    dialog { width: min(440px, calc(100% - 24px)); color: var(--ink); box-shadow: 0 18px 65px #211d2633; }
+    dialog::backdrop { background: #211d2666; }
+    dialog form { margin-top: 14px; }
+    dialog .option { flex-wrap: wrap; }
+    .table-wrap { overflow: auto; }
+    .table-wrap:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; text-align: left; white-space: nowrap; }
+    th { color: var(--muted); font-size: 12px; font-weight: 700; }
+    td, th { padding: 8px; border-bottom: 1px solid var(--line); }
+    td { font-variant-numeric: tabular-nums; }
+    .dot { display: inline-block; border: 1px solid #211d2633; width: 22px; height: 22px; border-radius: 5px; vertical-align: middle; }
+    .hex { border: 0; padding: 4px; background: none; color: var(--accent); border-radius: 5px; }
+    .hex:hover { background: var(--tint); }
+    .pager { justify-content: flex-end; margin-top: 12px; }
+    .note { margin: 13px 0 28px; }
+    .toast { position: fixed; right: 20px; bottom: 20px; background: var(--ink); color: white; border-radius: 9px; padding: 9px 14px; z-index: 1; }
+    .toast:empty { display: none; }
+    @media (min-width: 980px) {
+      .preview { max-height: clamp(215px, 46vh, 440px); }
+      .table-wrap { max-height: clamp(210px, calc(100vh - 500px), 600px); }
+      th { position: sticky; top: 0; z-index: 1; background: var(--white); }
+    }
+    @media (max-width: 979px) {
+      .workspace { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .inventory { grid-column: 1 / -1; }
+      .source-panel { position: static; }
+    }
+    @media (max-width: 580px) {
+      .wrap { width: calc(100% - 24px); }
+      .hero, .workspace { grid-template-columns: minmax(0, 1fr); }
+      .hero { gap: 10px; }
+      td, th { padding-inline: 5px; }
+    }
+    @media (max-width: 360px) { .badge-label { display: none; } }
+  </style>
+</head>
+<body>
+  <header><div class="wrap mast"><div class="brand"><span class="mark" aria-hidden="true"></span>Colorroom</div><span class="badge">v1.6<span class="badge-label"> · Runs on your device</span></span></div></header>
+  <main class="wrap">
+    <section class="hero" aria-labelledby="title">
+      <div><p class="eyebrow">Image palette studio</p><h1 id="title">Find the colors in any image.</h1><p class="intro">Extract every HEX shade and build palettes from your image.</p></div>
+      <div class="upload" id="drop">
+        <svg width="31" height="31" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m3 16 5-4 4 4 4-6 5 6"/></svg>
+        <div class="upload-copy"><strong>Drop an image here</strong><p class="small">PNG, JPG, WebP, GIF, BMP or AVIF · up to 24 megapixels</p></div>
+        <div class="upload-actions"><button type="button" class="btn primary" id="choose">Choose image</button><button type="button" class="text-btn" id="sample">Try sample</button></div>
+        <input type="file" id="file" accept="image/png,image/jpeg,image/webp,image/gif,image/bmp,image/avif,.png,.jpg,.jpeg,.webp,.gif,.bmp,.avif" hidden>
+      </div>
+    </section>
+    <p id="status" class="status" role="status"></p>
+    <div class="workspace">
+      <section class="panel source-panel" aria-labelledby="image-title">
+        <div class="panel-head"><div><h2 id="image-title">Source image</h2><p class="small" id="image-summary">Upload an image to get started.</p></div></div>
+        <div class="source-frame" id="source-frame">
+          <div class="preview"><img id="preview" alt="Uploaded image preview" hidden><span id="preview-empty" class="small">Image preview</span></div>
+          <button class="location-marker" id="location-marker" type="button" aria-controls="shade-inspector" aria-expanded="false" hidden></button>
+          <span class="location-marker emphasized" id="related-marker" aria-hidden="true" hidden></span>
+        </div>
+        <div class="meta"><strong id="filename"></strong><span class="small" id="dimensions"></span></div>
+        <p class="small source-match" id="source-match" hidden></p>
+        <div class="actions"><button class="btn" id="pick-image" aria-pressed="false" disabled>Pick from image</button><span class="small" id="pick-help" hidden>Click a spot in the image, or pick HEX values from All Shades.</span></div>
+        <div id="source-inspector"><details class="inspection" id="shade-inspector" hidden>
+          <summary id="inspection-summary">Related shades</summary>
+          <p class="small" id="inspection-note" role="status"></p>
+          <div class="related-shades" id="related-shades"></div>
+          <div class="actions"><button class="btn" id="copy-inspected" type="button">Copy HEX</button><button class="btn" id="copy-recipe-swatch" type="button" hidden>Copy palette HEX</button><button class="btn" id="related-previous" type="button" hidden>Previous shades</button><button class="btn primary" id="related-next" type="button" hidden>More shades</button></div>
+        </details></div>
+      </section>
+      <section class="panel palette-panel" aria-labelledby="palette-title">
+        <div class="panel-head"><div><h2 id="palette-title">Design palette</h2><p class="small">Hover a swatch to locate its image color. Click it for related shades sampled from the image.</p></div></div>
+        <div class="options">
+          <span class="option"><label for="mode">Style</label><select id="mode" disabled>
+            <optgroup label="From the image"><option value="balanced">Balanced</option><option value="dominant">Dominant</option></optgroup>
+            <optgroup label="Color wheel"><option value="monochromatic">Monochromatic</option><option value="analogous">Analogous</option><option value="complementary">Complementary</option><option value="split">Split-Complementary</option><option value="triadic">Triadic</option><option value="tetradic">Tetradic (Double-Complementary)</option></optgroup>
+            <optgroup label="Functional and aesthetic"><option value="neutral">Neutral</option><option value="pastel">Pastel</option><option value="vibrant">Vibrant / Bright</option><option value="seasonal">Seasonal / Thematic</option><option value="custom">Custom / Brand Identity</option></optgroup>
+          </select></span>
+          <span class="option" id="size-option"><label for="size">Colors</label><select id="size" disabled><option>3</option><option>4</option><option>5</option><option selected>6</option><option>7</option><option>8</option><option>9</option><option>10</option><option>11</option><option>12</option></select></span>
+          <span class="option" id="theme-option" hidden><label for="theme">Theme</label><select id="theme"><option>Spring</option><option>Summer</option><option>Autumn</option><option>Winter</option><option>Holiday</option><option>Nature</option></select></span>
+        </div>
+        <p class="small recipe-note" id="recipe-note"></p>
+        <div class="picks" id="picks" aria-label="Selected image colors"></div>
+        <div class="swatches" id="swatches" data-empty="Upload an image to generate a palette."></div>
+        <div id="palette-inspector"></div>
+        <div class="actions"><button class="btn primary" id="copy-palette" disabled>Copy palette</button><button class="btn" id="export-css" disabled>Export CSS</button></div>
+      </section>
+    <section class="panel inventory" aria-labelledby="inventory-title">
+      <div class="panel-head"><div><h2 id="inventory-title">Image colors</h2><p class="small" id="count">Every distinct HEX value in the image.</p></div><button class="btn" id="export-csv" disabled>Export all as CSV</button></div>
+      <p class="small list-help">Hover a HEX code to locate a pixel. Click it to expand related shades from the image.</p>
+      <div class="detail">
+        <div class="detail-head"><label for="shade-limit">Shades to show</label><input type="number" id="shade-limit" min="1" max="1" step="1" inputmode="numeric" aria-describedby="detail-help" disabled></div>
+        <input type="range" id="shade-detail" min="0" max="0" value="0" aria-label="Shade detail" aria-describedby="detail-help" disabled>
+        <div class="small detail-ends"><span>Fewer, more distinct shades</span><span>Every shade</span></div>
+        <p class="small" id="detail-help">The slider narrows the list and new picks. Existing palette picks stay selected.</p>
+      </div>
+      <div class="filters">
+        <span class="option"><label for="filter">Find HEX</label><input type="search" id="filter" placeholder="e.g. #B47" maxlength="7" spellcheck="false" disabled></span>
+        <span class="option"><label for="sort">Sort</label><select id="sort" disabled><option value="variety">Color variety</option><option value="frequency">Most frequent</option><option value="hex">HEX ascending</option></select></span>
+        <span class="option"><label for="page-limit">Page limit</label><input type="number" id="page-limit" min="1" max="1398102" step="1" value="15" inputmode="numeric" disabled></span>
+        <button type="button" class="btn" id="clear-filters" disabled>Clear filters</button>
+      </div>
+      <div class="table-wrap" id="color-table" role="region" aria-label="Image color results" tabindex="0"><table><thead><tr><th scope="col">Swatch</th><th scope="col">HEX</th><th scope="col">Pixels</th><th scope="col">Image share</th><th scope="col">Palette</th></tr></thead><tbody id="rows"><tr><td colspan="5">No colors loaded.</td></tr></tbody></table></div>
+      <div class="pager"><span class="small" id="page-info" role="status"></span><button class="btn" id="previous" disabled>Previous</button><button class="btn" id="next" disabled>More colors</button></div>
+    </section>
+    </div>
+    <p class="small note">HEX values use browser-decoded sRGB. Fully transparent pixels are skipped. For animated images, Colorroom reads the first frame.</p>
+  </main>
+  <dialog class="panel" id="browse-choice" aria-labelledby="browse-title" aria-describedby="browse-description">
+    <h2 id="browse-title">How would you like to browse?</h2>
+    <p class="small" id="browse-description"></p>
+    <form id="browse-form">
+      <div class="option"><label for="browse-hex">Find a color</label><input type="search" id="browse-hex" placeholder="HEX or prefix" maxlength="7" pattern="#?[0-9A-Fa-f]{1,6}" spellcheck="false" required><button class="btn" type="submit">Search</button></div>
+      <div class="actions"><button class="btn primary" id="browse-continue" type="button" autofocus>Keep browsing</button><button class="btn" id="browse-cancel" type="button">Cancel</button></div>
+    </form>
+  </dialog>
+  <div class="toast" id="toast" role="status"></div>
+  <script id="worker-code" type="text/plain">
+    const COLOR_SPACE_SIZE = 1 << 24;
+    const PAGE_SIZE = 12;
+    let counts, hexOrder, frequencyOrder, varietyOrder, candidates, visiblePixels, sourceContext;
+    let focusedMask, focusedLimit;
+    let colorLocations, relatedBase, relatedChoices, matchKeys, matchLab;
+    const sourceMatches = new Map();
+    const RELATED_PAGE_SIZE = 8;
+
+    const hex = key => '#' + key.toString(16).padStart(6, '0').toUpperCase();
+
+    async function analyze(file) {
+      const bitmap = await createImageBitmap(file);
+      const { width, height } = bitmap;
+      try {
+        if (width * height > 24000000) throw new Error('Choose an image with 24 megapixels or fewer.');
+        const canvas = new OffscreenCanvas(width, height);
+        const context = canvas.getContext('2d', { colorSpace: 'srgb', willReadFrequently: true });
+        context.drawImage(bitmap, 0, 0);
+        counts = new Uint32Array(COLOR_SPACE_SIZE);
+        let firstPixels = new Uint32Array(COLOR_SPACE_SIZE);
+        visiblePixels = 0;
+        let distinct = 0;
+        const stripHeight = Math.max(1, Math.floor(1000000 / width));
+        for (let y = 0; y < height; y += stripHeight) {
+          const { data } = context.getImageData(0, y, width, Math.min(stripHeight, height - y));
+          for (let index = 0; index < data.length; index += 4) {
+            if (data[index + 3] === 0) continue;
+            const key = (data[index] << 16) | (data[index + 1] << 8) | data[index + 2];
+            if (counts[key]++ === 0) {
+              firstPixels[key] = y * width + index / 4;
+              distinct++;
+            }
+            visiblePixels++;
+          }
+        }
+        if (!visiblePixels) throw new Error('This image is fully transparent. Choose an image with visible pixels.');
+        indexColors(distinct, firstPixels);
+        firstPixels = undefined;
+        indexVariety();
+        const scale = Math.min(1, 1100 / Math.max(width, height));
+        const preview = new OffscreenCanvas(Math.max(1, Math.round(width * scale)), Math.max(1, Math.round(height * scale)));
+        preview.getContext('2d').drawImage(bitmap, 0, 0, preview.width, preview.height);
+        const previewFile = await preview.convertToBlob();
+        sourceContext = context;
+        postMessage({ type: 'ready', width, height, distinct, visiblePixels, previewFile, base: hex(frequencyOrder[0]) });
+      } finally {
+        bitmap.close();
+      }
+    }
+
+    function pickPixel(x, y, limit) {
+      const column = Math.min(sourceContext.canvas.width - 1, Math.floor(x * sourceContext.canvas.width));
+      const row = Math.min(sourceContext.canvas.height - 1, Math.floor(y * sourceContext.canvas.height));
+      const [red, green, blue, alpha] = sourceContext.getImageData(column, row, 1, 1).data;
+      if (!alpha) return null;
+      const key = (red << 16) | (green << 8) | blue;
+      const point = pixelCenter(column, row);
+      return { color: hex(key), point, allowed: limit === hexOrder.length || inSubset(key, subsetMask(limit)) };
+    }
+
+    function pixelCenter(column, row) {
+      const { width, height } = sourceContext.canvas;
+      return { x: (column + .5) / width, y: (row + .5) / height };
+    }
+
+    function locateColor(key) {
+      let low = 0, high = hexOrder.length - 1;
+      while (low <= high) {
+        const middle = (low + high) >>> 1;
+        if (hexOrder[middle] === key) {
+          const position = colorLocations[middle];
+          const width = sourceContext.canvas.width;
+          return pixelCenter(position % width, Math.floor(position / width));
+        }
+        if (hexOrder[middle] < key) low = middle + 1;
+        else high = middle - 1;
+      }
+    }
+
+    function indexColors(distinct, firstPixels) {
+      hexOrder = new Uint32Array(distinct);
+      colorLocations = new Uint32Array(distinct);
+      const binCounts = new Uint32Array(32768);
+      const representatives = new Uint32Array(binCounts.length);
+      let index = 0;
+      for (let key = 0; key < counts.length; key++) {
+        const count = counts[key];
+        if (count === 0) continue;
+        colorLocations[index] = firstPixels[key];
+        hexOrder[index++] = key;
+        const bin = ((key >> 19) << 10) | (((key >> 11) & 31) << 5) | ((key >> 3) & 31);
+        if (binCounts[bin] === 0 || count > counts[representatives[bin]]) representatives[bin] = key;
+        binCounts[bin] += count;
+      }
+      frequencyOrder = hexOrder.slice().sort(byFrequency);
+      candidates = [];
+      for (let bin = 0; bin < binCounts.length; bin++) {
+        if (binCounts[bin]) candidates.push({ key: representatives[bin], weight: binCounts[bin] });
+      }
+      candidates.sort((a, b) => b.weight - a.weight || a.key - b.key);
+    }
+
+    function byFrequency(a, b) {
+      return counts[b] - counts[a] || a - b;
+    }
+
+    function indexVariety() {
+      const leaders = new Set(balanced(12, .1));
+      // Add the dominant shade from each color group, coarse groups first.
+      for (let bits = 1; bits <= 5; bits++) {
+        const groups = new Set();
+        const shift = 8 - bits;
+        for (const { key } of candidates) {
+          const red = (key >> 16) >> shift;
+          const green = ((key >> 8) & 255) >> shift;
+          const blue = (key & 255) >> shift;
+          const group = (red << (bits * 2)) | (green << bits) | blue;
+          if (groups.has(group)) continue;
+          groups.add(group);
+          leaders.add(key);
+        }
+      }
+      varietyOrder = new Uint32Array(hexOrder.length);
+      varietyOrder.set([...leaders]);
+      let index = leaders.size;
+      for (const key of frequencyOrder) if (!leaders.has(key)) varietyOrder[index++] = key;
+    }
+
+    function subsetMask(limit) {
+      if (focusedLimit === limit) return focusedMask;
+      focusedMask = new Uint8Array(COLOR_SPACE_SIZE / 8);
+      for (const key of varietyOrder.subarray(0, limit)) focusedMask[key >> 3] |= 1 << (key & 7);
+      focusedLimit = limit;
+      return focusedMask;
+    }
+
+    function inSubset(key, mask) {
+      return Boolean(mask[key >> 3] & (1 << (key & 7)));
+    }
+
+    const linear = Array.from({ length: 256 }, (_, value) => {
+      const channel = value / 255;
+      return channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4;
+    });
+
+    function toLab(key) {
+      const r = linear[key >> 16], g = linear[(key >> 8) & 255], b = linear[key & 255];
+      const l = Math.cbrt(0.4122214708*r + 0.5363325363*g + 0.0514459929*b);
+      const m = Math.cbrt(0.2119034982*r + 0.6806995451*g + 0.1073969566*b);
+      const s = Math.cbrt(0.0883024619*r + 0.2817188376*g + 0.6299787005*b);
+      return [0.2104542553*l + 0.7936177850*m - 0.0040720468*s, 1.9779984951*l - 2.4285922050*m + 0.4505937099*s, 0.0259040371*l + 0.7827717662*m - 0.8086757660*s];
+    }
+
+    function paletteEntry(color) {
+      const key = parseInt(color.slice(1), 16);
+      if (counts[key]) return { color, source: { color, point: locateColor(key) } };
+      let match = sourceMatches.get(key);
+      if (match === undefined) {
+        if (!matchKeys) {
+          matchKeys = hexOrder.length <= 250000 ? hexOrder : Uint32Array.from(candidates, candidate => candidate.key);
+          matchLab = new Float32Array(matchKeys.length * 3);
+          for (let index = 0; index < matchKeys.length; index++) matchLab.set(toLab(matchKeys[index]), index * 3);
+        }
+        const [light, a, b] = toLab(key);
+        let nearest = Infinity;
+        for (let index = 0; index < matchKeys.length; index++) {
+          const offset = index * 3;
+          const distance = (matchLab[offset] - light) ** 2 + (matchLab[offset + 1] - a) ** 2 + (matchLab[offset + 2] - b) ** 2;
+          if (distance < nearest) {
+            match = matchKeys[index];
+            nearest = distance;
+          }
+        }
+        sourceMatches.set(key, match);
+      }
+      return { color, source: { color: hex(match), point: locateColor(match) } };
+    }
+
+    function relatedColors(base) {
+      const [baseLight, baseA, baseB] = toLab(base);
+      const baseChroma = Math.hypot(baseA, baseB);
+      const neutral = .035;
+      const options = new Map();
+      function consider(key) {
+        if (key === base || options.has(key)) return;
+        const [light, a, b] = toLab(key);
+        const chroma = Math.hypot(a, b);
+        const sameFamily = baseChroma < neutral ? chroma < neutral
+          : chroma >= neutral && a * baseA + b * baseB >= .866 * chroma * baseChroma;
+        if (!sameFamily) return;
+        const distance = (light - baseLight) ** 2 + (a - baseA) ** 2 + (b - baseB) ** 2;
+        options.set(key, { key, distance });
+      }
+      if (hexOrder.length <= 250000) {
+        for (const key of hexOrder) consider(key);
+      } else {
+        for (const { key } of candidates) consider(key);
+        const binStart = base & 0xF8F8F8;
+        for (let red = 0; red < 8; red++) {
+          for (let green = 0; green < 8; green++) {
+            for (let blue = 0; blue < 8; blue++) {
+              const key = binStart | (red << 16) | (green << 8) | blue;
+              if (counts[key]) consider(key);
+            }
+          }
+        }
+      }
+      return [...options.values()].sort((a, b) => a.distance - b.distance || counts[b.key] - counts[a.key] || a.key - b.key);
+    }
+
+    function buildPalette(size, mode) {
+      const limit = Math.min(size, hexOrder.length);
+      const chosen = mode === 'dominant' ? candidates.slice(0, limit).map(color => color.key) : balanced(limit);
+      for (const key of frequencyOrder) {
+        if (chosen.length === limit) break;
+        if (!chosen.includes(key)) chosen.push(key);
+      }
+      return chosen.map(hex);
+    }
+
+    function balanced(limit, weightExponent = .25) {
+      const colors = candidates.map(({ key, weight }) => ({ key, weight: weight ** weightExponent, lab: toLab(key), nearest: Infinity }));
+      const chosen = [];
+      let pick = colors[0];
+      while (chosen.length < Math.min(limit, colors.length)) {
+        chosen.push(pick.key);
+        const [l, a, b] = pick.lab;
+        let bestScore = -1;
+        let next;
+        for (const color of colors) {
+          const distance = (color.lab[0] - l) ** 2 + (color.lab[1] - a) ** 2 + (color.lab[2] - b) ** 2;
+          color.nearest = Math.min(color.nearest, distance);
+          const score = color.nearest * color.weight;
+          if (score > bestScore) {
+            bestScore = score;
+            next = color;
+          }
+        }
+        pick = next;
+      }
+      return chosen;
+    }
+
+    function findPage(prefix, sort, page, limit) {
+      const subset = varietyOrder.subarray(0, limit);
+      let order = subset;
+      let mask;
+      if (sort !== 'variety') {
+        if (limit < hexOrder.length && limit <= 32768) {
+          const sorted = subset.slice();
+          order = sort === 'hex' ? sorted.sort() : sorted.sort(byFrequency);
+        } else {
+          order = sort === 'hex' ? hexOrder : frequencyOrder;
+          if (limit < order.length) mask = subsetMask(limit);
+        }
+      }
+      const start = page * PAGE_SIZE;
+      if (!prefix && !mask) return { total: order.length, keys: order.slice(start, start + PAGE_SIZE) };
+      const unit = 16 ** (6 - prefix.length);
+      const lower = prefix ? parseInt(prefix, 16) * unit : 0;
+      const upper = lower + unit;
+      const keys = [];
+      let total = 0;
+      for (const key of order) {
+        if (key < lower || key >= upper) continue;
+        if (mask && !inSubset(key, mask)) continue;
+        if (total >= start && keys.length < PAGE_SIZE) keys.push(key);
+        total++;
+      }
+      return { total, keys };
+    }
+
+    function exportCsv() {
+      const chunks = ['hex,pixels,percent\r\n'];
+      let lines = [];
+      for (const key of hexOrder) {
+        lines.push(`${hex(key)},${counts[key]},${(counts[key] / visiblePixels * 100).toFixed(9)}\r\n`);
+        if (lines.length === 8192) {
+          chunks.push(lines.join(''));
+          lines = [];
+        }
+      }
+      chunks.push(lines.join(''));
+      return new Blob(chunks, { type: 'text/csv;charset=utf-8' });
+    }
+
+    self.onmessage = async ({ data }) => {
+      try {
+        if (data.type === 'image') await analyze(data.file);
+        if (data.type === 'palette') {
+          const entries = buildPalette(data.size, data.mode).map(paletteEntry);
+          postMessage({ type: 'palette', request: data.request, entries });
+        }
+        if (data.type === 'palette-sources') {
+          const entries = data.colors.map(paletteEntry);
+          postMessage({ type: 'palette', request: data.request, entries, roles: data.roles });
+        }
+        if (data.type === 'pixel') postMessage({ type: 'pixel', limit: data.limit, pick: pickPixel(data.x, data.y, data.limit) });
+        if (data.type === 'inspect') {
+          const key = parseInt(data.color.slice(1), 16);
+          if (relatedBase !== key) {
+            relatedChoices = relatedColors(key);
+            relatedBase = key;
+          }
+          const start = data.page * RELATED_PAGE_SIZE;
+          const related = relatedChoices.slice(start, start + RELATED_PAGE_SIZE).map(({ key: shade, distance }) => ({
+            color: hex(shade), point: locateColor(shade), difference: Math.min(100, Math.sqrt(distance) * 100)
+          }));
+          postMessage({ type: 'inspect', request: data.request, point: locateColor(key), related, total: relatedChoices.length, size: RELATED_PAGE_SIZE });
+        }
+        if (data.type === 'page') {
+          const { total, keys } = findPage(data.prefix, data.sort, data.page, data.limit);
+          const rows = Array.from(keys, key => ({ color: hex(key), point: locateColor(key), pixels: counts[key], share: counts[key] / visiblePixels }));
+          postMessage({ type: 'page', request: data.request, rows, total });
+        }
+        if (data.type === 'csv') postMessage({ type: 'csv', file: exportCsv() });
+      } catch (error) {
+        const message = error.name === 'InvalidStateError' ? 'This file could not be decoded. Try a different image.' : error.message;
+        postMessage({ type: 'error', operation: data.type, message });
+      }
+    };
+  </script>
+  <script>
+    const $ = id => document.getElementById(id);
+    const number = new Intl.NumberFormat();
+    const percentage = new Intl.NumberFormat(undefined, { style: 'percent', maximumFractionDigits: 3 });
+    const pageSize = 12;
+    const workerUrl = URL.createObjectURL(new Blob([$('worker-code').textContent], { type: 'text/javascript' }));
+    const inputIds = ['size', 'mode', 'filter', 'shade-limit', 'shade-detail', 'page-limit', 'clear-filters', 'sort', 'export-csv', 'pick-image'];
+    const MAX_PICKS = 12;
+    const wheelHues = [0, 15, 30, 45, 60, 90, 120, 180, 240, 265, 285, 330, 360];
+    const wheelStyles = {
+      monochromatic: { description: 'Shades, tints, and muted tones of one hue.' },
+      analogous: { steps: [-1, 1], description: 'The two hues beside your base on the artist’s color wheel.' },
+      complementary: { steps: [6], description: 'Your base and the hue directly opposite it.' },
+      split: { steps: [5, 7], description: 'The two hues on either side of your base’s opposite.' },
+      triadic: { steps: [4, 8], description: 'Three hues equally spaced around the wheel.' },
+      tetradic: { steps: [2, 6, 8], description: 'Two complementary pairs, including your base.' }
+    };
+    const aestheticStyles = {
+      neutral: 'Low-chroma lights, midtones, and darks.',
+      pastel: 'Light, softly saturated hues.',
+      vibrant: 'Bright, highly saturated hues.'
+    };
+    const themes = {
+      Spring: ['#F6E8C8', '#F4AAA7', '#F6C46B', '#83A867', '#877AB3'],
+      Summer: ['#FCE8B5', '#FF9876', '#37B4AE', '#3675AB', '#133E62'],
+      Autumn: ['#F1DAB6', '#D88738', '#A9432F', '#6D7040', '#51302A'],
+      Winter: ['#EDF4FA', '#B7CDD9', '#6481A3', '#32456B', '#593D67'],
+      Holiday: ['#F6EFE1', '#CB9F49', '#A92D40', '#306451', '#24332C'],
+      Nature: ['#E8DBBA', '#9CA667', '#5A794E', '#3F6D76', '#754B3A']
+    };
+    const brandRoles = ['Dominant · 60%', 'Secondary · 30%', 'Accent · 10%'];
+    let worker, previewUrl, loadId = 0, request = 0, paletteRequest = 0, page = 0, colors = [], ready = false, stem = 'colorroom', toastTimer;
+    let baseColor, picks = [], picking = false;
+    let distinct = 0, detailSteps = [], choseBrowseMode = false, pageBusy = false, pendingPage;
+    let inspectionRequest = 0, inspected, highlighted, relatedPage = 0, inspectorTrigger;
+    let palettePointer;
+    const paletteSources = new WeakMap();
+
+    const wrapHue = hue => (hue % 360 + 360) % 360;
+    const isImageMode = mode => mode === 'balanced' || mode === 'dominant';
+
+    function toHsl(hex) {
+      const rgb = parseInt(hex.slice(1), 16);
+      const r = (rgb >> 16) / 255, g = ((rgb >> 8) & 255) / 255, b = (rgb & 255) / 255;
+      const high = Math.max(r, g, b), low = Math.min(r, g, b);
+      const lightness = (high + low) / 2;
+      const delta = high - low;
+      if (!delta) return { hue: 220, saturation: 0, lightness };
+      let sector;
+      if (high === r) sector = (g - b) / delta;
+      else if (high === g) sector = 2 + (b - r) / delta;
+      else sector = 4 + (r - g) / delta;
+      return { hue: wrapHue(sector * 60), saturation: delta / (1 - Math.abs(2 * lightness - 1)), lightness };
+    }
+
+    function fromHsl(hue, saturation, lightness) {
+      const factor = saturation * Math.min(lightness, 1 - lightness);
+      function channel(offset) {
+        const position = (offset + wrapHue(hue) / 30) % 12;
+        const value = lightness - factor * Math.max(-1, Math.min(position - 3, 9 - position, 1));
+        return Math.round(value * 255).toString(16).padStart(2, '0');
+      }
+      return ('#' + channel(0) + channel(8) + channel(4)).toUpperCase();
+    }
+
+    // Map equal artist-wheel steps to display hues so red pairs with green and blue with orange.
+    function shiftOnWheel(hue, steps) {
+      const segment = wheelHues.findIndex(stop => stop > hue) - 1;
+      const fraction = (hue - wheelHues[segment]) / (wheelHues[segment + 1] - wheelHues[segment]);
+      const next = (segment + steps + 12) % 12;
+      return wheelHues[next] + fraction * (wheelHues[next + 1] - wheelHues[next]);
+    }
+
+    function suggestColors(mode, base, size, theme) {
+      const { hue, saturation, lightness } = toHsl(base);
+      if (mode === 'monochromatic') {
+        const tones = [[.18, 1], [.35, .65], [.67, .72], [.86, .9], [.51, .8]];
+        const variants = tones.map(([light, intensity]) => fromHsl(hue, saturation * intensity, light));
+        return [...new Set([base, ...variants])].slice(0, 5);
+      }
+      if (wheelStyles[mode]) {
+        const intensity = Math.max(.5, saturation);
+        const light = Math.max(.34, Math.min(.68, lightness));
+        return [base, ...wheelStyles[mode].steps.map(step => fromHsl(shiftOnWheel(hue, step), intensity, light))];
+      }
+      if (mode === 'seasonal') return themes[theme];
+      if (mode === 'neutral') {
+        const lights = [.96, .81, .65, .43, .23, .12, .90, .73, .53, .34, .17, .06];
+        return lights.slice(0, size).map((light, index) => fromHsl(hue, [.08, .14, .18][index % 3], light));
+      }
+      return Array.from({ length: size }, (_, index) => {
+        const nextHue = hue + index * 137.508;
+        return mode === 'pastel'
+          ? fromHsl(nextHue, .43, [.83, .88, .79][index % 3])
+          : fromHsl(nextHue, .91, [.53, .48, .59][index % 3]);
+      });
+    }
+
+    function message(text, error = false) {
+      $('status').textContent = text;
+      $('status').classList.toggle('error', error);
+    }
+
+    function notify(text) {
+      clearTimeout(toastTimer);
+      $('toast').textContent = text;
+      toastTimer = setTimeout(() => { $('toast').textContent = ''; }, 2700);
+    }
+
+    function element(tag, className, text) {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text !== undefined) node.textContent = text;
+      return node;
+    }
+
+    function emptyRows(text) {
+      returnInspector();
+      const row = element('tr');
+      const cell = element('td', '', text);
+      cell.colSpan = 5;
+      row.append(cell);
+      $('rows').replaceChildren(row);
+    }
+
+    function reset() {
+      worker?.terminate();
+      worker = undefined;
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
+      previewUrl = undefined;
+      $('preview').removeAttribute('src');
+      $('preview').hidden = true;
+      $('preview').parentElement.style.removeProperty('--preview-ratio');
+      $('preview-empty').hidden = false;
+      inspected = highlighted = undefined;
+      dockInspector($('source-inspector'));
+      $('shade-inspector').open = false;
+      $('shade-inspector').hidden = true;
+      $('related-shades').replaceChildren();
+      $('location-marker').classList.remove('emphasized');
+      drawMarkers();
+      $('filename').textContent = '';
+      $('filename').title = '';
+      $('dimensions').textContent = '';
+      $('image-summary').textContent = 'Upload an image to get started.';
+      $('count').textContent = 'Every distinct HEX value in the image.';
+      $('page-info').textContent = '';
+      $('filter').value = '';
+      $('filter').removeAttribute('aria-invalid');
+      $('shade-limit').value = '';
+      $('shade-limit').removeAttribute('aria-invalid');
+      $('page-limit').removeAttribute('aria-invalid');
+      $('shade-detail').max = '0';
+      $('shade-detail').removeAttribute('aria-valuetext');
+      if ($('browse-choice').open) $('browse-choice').close();
+      choseBrowseMode = false;
+      distinct = 0;
+      detailSteps = [];
+      pageBusy = false;
+      pendingPage = undefined;
+      $('swatches').replaceChildren();
+      $('swatches').inert = false;
+      palettePointer = undefined;
+      $('swatches').dataset.empty = 'Upload an image to generate a palette.';
+      $('recipe-note').textContent = '';
+      $('picks').replaceChildren();
+      picks = [];
+      baseColor = undefined;
+      setPicking(false);
+      emptyRows('No colors loaded.');
+      for (const id of [...inputIds, 'copy-palette', 'export-css', 'previous', 'next']) $(id).disabled = true;
+      colors = [];
+      page = 0;
+      ready = false;
+    }
+
+    function openImage(file, isSample = false) {
+      loadId++;
+      reset();
+      stem = file.name.replace(/\.[^.]+$/, '').replace(/[^\w.-]+/g, '-').slice(0, 80) || 'colorroom';
+      message(`Reading ${isSample ? 'the sample image' : file.name}…`);
+      try {
+        worker = new Worker(workerUrl);
+        worker.onmessage = ({ data }) => {
+          if (data.type === 'ready') {
+            baseColor = data.base;
+            distinct = data.distinct;
+            previewUrl = URL.createObjectURL(data.previewFile);
+            $('preview').src = previewUrl;
+            $('preview').hidden = false;
+            $('preview-empty').hidden = true;
+            $('filename').textContent = isSample ? 'Dusk at Mesa Valley · sample' : file.name;
+            $('filename').title = $('filename').textContent;
+            $('dimensions').textContent = `${number.format(data.width)} × ${number.format(data.height)}`;
+            $('image-summary').textContent = `${number.format(data.visiblePixels)} visible pixels analyzed`;
+            for (const id of inputIds) $(id).disabled = false;
+            setupDetail();
+            ready = true;
+            message(isSample ? 'Sample loaded. Upload your own image whenever you’re ready.' : 'Image analyzed. Your palette and shades are ready.');
+            updatePalette();
+            updatePage();
+          }
+          if (data.type === 'palette' && data.request === paletteRequest) renderPalette(data.entries, data.roles);
+          if (data.type === 'pixel') {
+            if (!picking || data.limit !== shadeLimit()) return;
+            if (!data.pick) {
+              notify('That pixel is fully transparent.');
+              return;
+            }
+            inspectShade(data.pick.color, data.pick.point);
+            if (data.pick.allowed) selectColor(data.pick.color);
+            else notify(`${data.pick.color} is outside the current list. Move Shade detail right to add it.`);
+          }
+          if (data.type === 'inspect' && data.request === inspectionRequest) renderInspection(data);
+          if (data.type === 'page') {
+            pageBusy = false;
+            if (data.request === request) renderPage(data.rows, data.total);
+            sendPendingPage();
+          }
+          if (data.type === 'csv') {
+            download(data.file, `${stem}-all-shades.csv`);
+            $('export-csv').disabled = false;
+            message('Shade CSV downloaded.');
+          }
+          if (data.type === 'error') {
+            if (data.operation === 'csv') $('export-csv').disabled = false;
+            if (data.operation === 'palette' || data.operation === 'palette-sources') $('swatches').inert = false;
+            if (data.operation === 'page') {
+              pageBusy = false;
+              sendPendingPage();
+            }
+            message(data.message || 'Unable to process this image.', true);
+          }
+        };
+        worker.onerror = () => {
+          reset();
+          message('Image processing could not start. Open Colorroom in a current browser and try again.', true);
+        };
+        worker.postMessage({ type: 'image', file });
+      } catch {
+        message('Image processing could not start. Open Colorroom in a current browser and try again.', true);
+      }
+    }
+
+    function updatePalette() {
+      if (!ready) return;
+      if ($('shade-inspector').parentElement === $('palette-inspector')) {
+        dockInspector($('source-inspector'));
+        $('shade-inspector').hidden = true;
+        inspectionRequest++;
+        inspected = highlighted = undefined;
+      } else if (highlighted?.paletteColor) {
+        highlighted = undefined;
+      }
+      drawMarkers();
+      $('swatches').inert = true;
+      $('copy-palette').disabled = $('export-css').disabled = true;
+      const mode = $('mode').value;
+      const size = Number($('size').value);
+      const theme = $('theme').value;
+      const base = picks[0] || baseColor;
+      const fromImage = isImageMode(mode);
+      const wheel = wheelStyles[mode];
+      $('size-option').hidden = !fromImage && !aestheticStyles[mode];
+      $('theme-option').hidden = mode !== 'seasonal';
+      $('swatches').dataset.empty = 'Pick colors from the image or All Shades.';
+      paletteRequest++;
+      if (fromImage) {
+        $('recipe-note').textContent = 'Extracts representative colors from the image.';
+        worker.postMessage({ type: 'palette', size, mode, request: paletteRequest });
+        return;
+      }
+      if (mode === 'custom') {
+        $('recipe-note').textContent = picks.length >= 3
+          ? 'Suggested usage for your first three picks: dominant, secondary, and accent.'
+          : 'Pick at least three colors to assign 60/30/10 design roles.';
+        requestPaletteSources(picks, picks.length >= 3 ? brandRoles : []);
+        return;
+      }
+      const fallback = wheel?.steps && !toHsl(base).saturation ? ' Blue guides the suggested hues for this gray base.' : '';
+      $('recipe-note').textContent = wheel
+        ? `${wheel.description} Base ${base}${picks.length ? '' : ' (most frequent shade)'}.${fallback}`
+        : aestheticStyles[mode] || `A preset inspired by ${theme.toLowerCase()}.`;
+      const suggested = suggestColors(mode, base, size, theme);
+      requestPaletteSources([...new Set([...picks, ...suggested])]);
+    }
+
+    function requestPaletteSources(colors, roles = []) {
+      if (!colors.length) renderPalette([]);
+      else worker.postMessage({ type: 'palette-sources', colors, roles, request: paletteRequest });
+    }
+
+    function setPicking(active) {
+      picking = active;
+      $('pick-image').setAttribute('aria-pressed', active);
+      $('preview').classList.toggle('picking', active);
+      $('pick-help').hidden = !active;
+    }
+
+    function imageBounds() {
+      const image = $('preview');
+      if (!image.naturalWidth) return null;
+      const rect = image.getBoundingClientRect();
+      const scale = Math.min(rect.width / image.naturalWidth, rect.height / image.naturalHeight);
+      const width = image.naturalWidth * scale;
+      const height = image.naturalHeight * scale;
+      return { left: rect.left + (rect.width - width) / 2, top: rect.top + (rect.height - height) / 2, width, height };
+    }
+
+    function drawMarkers() {
+      const bounds = imageBounds();
+      const frame = $('source-frame').getBoundingClientRect();
+      const match = highlighted || inspected;
+      const readout = $('source-match');
+      readout.hidden = !match?.paletteColor;
+      if (!readout.hidden) {
+        const label = match.related ? `Related image pixel ${match.color}`
+          : match.color === match.paletteColor ? `Image pixel ${match.color}`
+          : `Palette ${match.paletteColor} → nearby image pixel ${match.color}`;
+        if (readout.textContent !== label) readout.textContent = label;
+      }
+      for (const [id, entry] of [['location-marker', inspected], ['related-marker', highlighted]]) {
+        const marker = $(id);
+        marker.hidden = !bounds || !entry?.point;
+        if (marker.hidden) continue;
+        marker.style.left = `${(bounds.left - frame.left + entry.point.x * bounds.width) / frame.width * 100}%`;
+        marker.style.top = `${bounds.top - frame.top + entry.point.y * bounds.height}px`;
+        marker.style.backgroundColor = entry.color;
+      }
+    }
+
+    function returnInspector() {
+      if ($('shade-inspector').closest('.inspection-row')) dockInspector($('source-inspector'));
+    }
+
+    function dockInspector(host) {
+      const inspector = $('shade-inspector');
+      if (inspector.parentElement === host) return;
+      const row = inspector.closest('.inspection-row');
+      if (row) row.hidden = true;
+      inspector.open = false;
+      inspectorTrigger?.setAttribute('aria-expanded', 'false');
+      inspectorTrigger = undefined;
+      host.append(inspector);
+    }
+
+    function inspectShade(color, point, host = $('source-inspector'), trigger, paletteColor) {
+      const inspector = $('shade-inspector');
+      dockInspector(host);
+      if (inspectorTrigger !== trigger) inspectorTrigger?.setAttribute('aria-expanded', 'false');
+      inspectorTrigger = trigger;
+      if (host.parentElement.classList.contains('inspection-row')) host.parentElement.hidden = false;
+      inspected = { color, point, paletteColor };
+      relatedPage = 0;
+      if (!paletteColor || highlighted?.paletteColor !== paletteColor || highlighted.related || highlighted.color !== color) {
+        highlighted = undefined;
+      }
+      inspector.hidden = false;
+      inspector.open = true;
+      trigger?.setAttribute('aria-expanded', 'true');
+      const suggested = paletteColor && paletteColor !== color;
+      $('inspection-summary').textContent = suggested ? `${paletteColor} · Image shades near ${color}` : `${color} · Related shades`;
+      $('copy-inspected').textContent = suggested ? 'Copy image HEX' : 'Copy HEX';
+      $('copy-recipe-swatch').hidden = !suggested;
+      $('related-shades').replaceChildren();
+      $('location-marker').setAttribute('aria-label', `Toggle related shades for ${color}`);
+      $('location-marker').title = color;
+      drawMarkers();
+      requestRelated();
+    }
+
+    function requestRelated() {
+      if (!inspected) return;
+      $('inspection-note').textContent = 'Finding related colors in this image…';
+      $('related-previous').hidden = $('related-next').hidden = true;
+      worker.postMessage({ type: 'inspect', color: inspected.color, page: relatedPage, request: ++inspectionRequest });
+    }
+
+    function bindHighlight(button, entry) {
+      const highlight = () => { highlighted = entry; drawMarkers(); };
+      const clear = () => {
+        if (highlighted !== entry) return;
+        highlighted = undefined;
+        drawMarkers();
+      };
+      button.onpointerenter = button.onfocus = highlight;
+      button.onpointerleave = () => { if (!button.matches(':focus-visible')) clear(); };
+      button.onblur = clear;
+    }
+
+    function renderInspection({ point, related, total, size }) {
+      inspected.point ||= point;
+      if (!highlighted?.paletteColor || highlighted.related) highlighted = undefined;
+      drawMarkers();
+      const pages = Math.min(Math.ceil(total / size), pageLimit() || 15);
+      $('inspection-note').textContent = related.length
+        ? `Shade page ${number.format(relatedPage + 1)} of ${number.format(pages)}. Difference is an estimated visual distance from ${inspected.color}.`
+        : 'No other shades in this color family were found.';
+      $('related-previous').hidden = relatedPage === 0;
+      $('related-next').hidden = relatedPage + 1 >= pages;
+      $('related-shades').replaceChildren(...related.map(entry => {
+        const button = element('button', 'chip');
+        const swatch = element('span', 'dot');
+        swatch.style.backgroundColor = entry.color;
+        const difference = entry.difference < .1 ? '<0.1%' : `${entry.difference.toFixed(1)}%`;
+        button.append(swatch, element('code', '', entry.color), element('span', 'small', difference));
+        button.setAttribute('aria-label', `Locate and inspect ${entry.color}`);
+        const paletteColor = inspected.paletteColor;
+        bindHighlight(button, paletteColor ? { ...entry, paletteColor, related: true } : entry);
+        button.onclick = () => {
+          inspectShade(entry.color, entry.point, $('shade-inspector').parentElement, inspectorTrigger, paletteColor);
+          $('inspection-summary').focus({ preventScroll: true });
+        };
+        return button;
+      }));
+    }
+
+    function selectColor(color, toggle = false) {
+      if (picks.includes(color)) {
+        if (toggle) picks = picks.filter(value => value !== color);
+        else {
+          notify(`${color} is already selected.`);
+          return;
+        }
+      } else {
+        if (picks.length === MAX_PICKS) {
+          notify(`You can select up to ${MAX_PICKS} source colors.`);
+          return;
+        }
+        picks = [...picks, color];
+        if (isImageMode($('mode').value)) $('mode').value = 'custom';
+      }
+      renderPicks();
+      updatePalette();
+    }
+
+    function renderPicks() {
+      const chips = picks.map((color, index) => {
+        const chip = element('button', 'chip');
+        const swatch = element('span', 'dot');
+        swatch.style.backgroundColor = color;
+        chip.append(swatch, element('code', '', color), element('span', '', '×'));
+        chip.setAttribute('aria-label', `Remove ${index === 0 ? 'base color ' : ''}${color}`);
+        chip.onclick = () => selectColor(color, true);
+        return chip;
+      });
+      $('picks').replaceChildren(...(chips.length ? [element('span', 'small', 'Selected'), ...chips] : []));
+      for (const button of $('rows').querySelectorAll('[data-pick]')) updatePickButton(button);
+    }
+
+    function updatePickButton(button) {
+      const color = button.dataset.pick;
+      const selected = picks.includes(color);
+      button.textContent = selected ? 'Picked' : 'Pick';
+      button.setAttribute('aria-pressed', selected);
+      button.setAttribute('aria-label', selected ? `Remove ${color} from palette` : `Pick ${color} for palette`);
+    }
+
+    function setupDetail() {
+      detailSteps = [1];
+      let count = 1;
+      // Make small counts precise while keeping the full image one drag away.
+      while (count < distinct) {
+        count = Math.min(distinct, count < 24 ? count + 1 : Math.ceil(count * 1.12));
+        detailSteps.push(count);
+      }
+      $('shade-limit').max = distinct;
+      $('shade-detail').max = detailSteps.length - 1;
+      $('shade-detail').disabled = distinct === 1;
+      setShadeLimit(distinct);
+    }
+
+    function setShadeLimit(limit) {
+      $('shade-limit').value = limit;
+      syncDetail(limit);
+    }
+
+    function syncDetail(limit) {
+      const upper = detailSteps.findIndex(value => value >= limit);
+      const position = upper > 0 && limit - detailSteps[upper - 1] < detailSteps[upper] - limit ? upper - 1 : upper;
+      $('shade-detail').value = position;
+      const description = limit === distinct ? `All ${number.format(limit)} shades` : `${number.format(limit)} shades`;
+      $('shade-detail').setAttribute('aria-valuetext', description);
+    }
+
+    function shadeLimit() {
+      const input = $('shade-limit');
+      return input.validity.valid && input.value ? input.valueAsNumber : null;
+    }
+
+    function pageLimit() {
+      const input = $('page-limit');
+      return input.validity.valid && input.value ? input.valueAsNumber : null;
+    }
+
+    function sendPendingPage() {
+      if (pageBusy || !pendingPage) return;
+      pageBusy = true;
+      worker.postMessage(pendingPage);
+      pendingPage = undefined;
+    }
+
+    function updatePage() {
+      if (!ready) return;
+      const prefix = $('filter').value.trim().replace(/^#/, '');
+      const limit = shadeLimit();
+      const cap = pageLimit();
+      const validPrefix = /^[\da-f]{0,6}$/i.test(prefix);
+      request++;
+      pendingPage = undefined;
+      $('previous').disabled = true;
+      $('next').disabled = true;
+      $('filter').setAttribute('aria-invalid', !validPrefix);
+      $('shade-limit').setAttribute('aria-invalid', limit === null);
+      $('page-limit').setAttribute('aria-invalid', cap === null);
+      if (!validPrefix || limit === null || cap === null) {
+        $('page-info').textContent = '';
+        $('count').textContent = `${number.format(distinct)} distinct shades`;
+        if (!validPrefix) emptyRows('Enter up to six HEX characters (0–9 or A–F).');
+        else if (limit === null) emptyRows(`Enter a shade count from 1 to ${number.format(distinct)}.`);
+        else emptyRows('Enter a positive whole number for the page limit.');
+        return;
+      }
+      pendingPage = { type: 'page', prefix, sort: $('sort').value, page, limit, request };
+      sendPendingPage();
+    }
+
+    function restartBrowsing() {
+      page = 0;
+      updatePage();
+    }
+
+    function nextPage() {
+      page++;
+      updatePage();
+    }
+
+    function renderPalette(palette, roles = []) {
+      colors = palette.map(entry => entry.color);
+      const grid = $('swatches');
+      grid.replaceChildren(...palette.map(({ color, source }, index) => {
+        const swatch = element('button', 'swatch');
+        const role = roles[index];
+        swatch.setAttribute('aria-label', `${color}${role ? `, ${role}` : ''}. Show related image shades near ${source.color}`);
+        swatch.setAttribute('aria-controls', 'palette-inspector');
+        swatch.setAttribute('aria-expanded', 'false');
+        const paint = element('span', 'paint');
+        paint.style.backgroundColor = color;
+        swatch.append(paint, element('code', '', color));
+        if (role) swatch.append(element('span', 'role', role));
+        const entry = { ...source, paletteColor: color };
+        paletteSources.set(swatch, entry);
+        bindHighlight(swatch, entry);
+        swatch.onclick = () => {
+          const inspector = $('shade-inspector');
+          if (inspectorTrigger === swatch && inspector.open) inspector.open = false;
+          else inspectShade(source.color, source.point, $('palette-inspector'), swatch, color);
+        };
+        return swatch;
+      }));
+      grid.inert = false;
+      const revision = paletteRequest;
+      requestAnimationFrame(() => {
+        if (revision !== paletteRequest || !palettePointer) return;
+        const { x, y } = palettePointer;
+        const button = document.elementFromPoint(x, y)?.closest('.swatch');
+        if (!button) return;
+        highlighted = paletteSources.get(button);
+        drawMarkers();
+      });
+      $('copy-palette').disabled = !colors.length;
+      $('export-css').disabled = !colors.length;
+    }
+
+    function renderPage(rows, total) {
+      returnInspector();
+      $('color-table').scrollTop = 0;
+      if (!highlighted?.paletteColor) highlighted = undefined;
+      drawMarkers();
+      const listedLimit = shadeLimit();
+      const available = Math.min(total, pageLimit() * pageSize);
+      if (rows.length) {
+        $('rows').replaceChildren(...rows.flatMap(({ color, point, pixels, share }) => {
+          const row = element('tr');
+          const expansion = element('tr', 'inspection-row');
+          expansion.hidden = true;
+          const host = expansion.insertCell();
+          host.colSpan = 5;
+          const paint = element('span', 'dot');
+          paint.style.backgroundColor = color;
+          const button = element('button', 'hex');
+          button.setAttribute('aria-label', `Locate ${color} and expand related shades`);
+          button.setAttribute('aria-expanded', 'false');
+          button.append(element('code', '', color), element('span', '', ' ▾'));
+          const toggle = () => {
+            const inspector = $('shade-inspector');
+            if (inspector.parentElement === host && inspector.open && inspected.color === color) inspector.open = false;
+            else inspectShade(color, point, host, button);
+          };
+          button.onclick = toggle;
+          const locate = element('button', 'shade-locate');
+          locate.setAttribute('aria-label', `Locate ${color}`);
+          locate.append(paint);
+          locate.onclick = toggle;
+          const entry = { color, point };
+          bindHighlight(button, entry);
+          bindHighlight(locate, entry);
+          row.insertCell().append(locate);
+          row.insertCell().append(button);
+          row.insertCell().textContent = number.format(pixels);
+          row.insertCell().textContent = share < 0.00001 ? '<0.001%' : percentage.format(share);
+          const pick = element('button', 'btn pick');
+          pick.dataset.pick = color;
+          updatePickButton(pick);
+          pick.onclick = () => {
+            if (shadeLimit() === listedLimit) selectColor(color, true);
+          };
+          row.insertCell().append(pick);
+          return [row, expansion];
+        }));
+      } else {
+        emptyRows('No shades match the current filters.');
+      }
+      const start = page * pageSize;
+      $('count').textContent = total === distinct
+        ? `${number.format(distinct)} distinct ${distinct === 1 ? 'shade' : 'shades'}`
+        : `${number.format(total)} of ${number.format(distinct)} shades match`;
+      $('page-info').textContent = available
+        ? `Page ${number.format(page + 1)} of ${number.format(Math.ceil(available / pageSize))} · ${number.format(start + 1)}–${number.format(start + rows.length)} of ${number.format(available)}${available < total ? ' · raise Page limit for more' : ''}`
+        : '0 results';
+      $('previous').disabled = page === 0;
+      $('next').disabled = start + rows.length >= available;
+    }
+
+    async function copy(value, confirmation) {
+      try {
+        await navigator.clipboard.writeText(value);
+      } catch {
+        const focused = document.activeElement;
+        const field = element('textarea');
+        field.value = value;
+        field.style.position = 'fixed';
+        field.style.left = '-9999px';
+        document.body.append(field);
+        field.select();
+        let copied = false;
+        try { copied = document.execCommand('copy'); } catch { /* Clipboard may be blocked. */ }
+        field.remove();
+        focused?.focus();
+        if (!copied) {
+          notify('Clipboard unavailable. You can export the colors instead.');
+          return;
+        }
+      }
+      notify(confirmation);
+    }
+
+    function download(blob, name) {
+      const url = URL.createObjectURL(blob);
+      const link = element('a');
+      link.href = url;
+      link.download = name;
+      document.body.append(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
+    }
+
+    function sampleImage() {
+      const current = ++loadId;
+      const canvas = document.createElement('canvas');
+      canvas.width = 840;
+      canvas.height = 390;
+      const ctx = canvas.getContext('2d');
+      const sky = ctx.createLinearGradient(0, 0, 0, 355);
+      sky.addColorStop(0, '#382457');
+      sky.addColorStop(.51, '#a36592');
+      sky.addColorStop(1, '#f7a47e');
+      ctx.fillStyle = sky;
+      ctx.fillRect(0, 0, 840, 390);
+      ctx.fillStyle = '#ffd291';
+      ctx.beginPath();
+      ctx.arc(582, 147, 62, 0, Math.PI * 2);
+      ctx.fill();
+
+      function mountain(color, points) {
+        ctx.fillStyle = color;
+        ctx.beginPath();
+        ctx.moveTo(0, 390);
+        for (const [x, y] of points) ctx.lineTo(x, y);
+        ctx.lineTo(840, 390);
+        ctx.fill();
+      }
+
+      mountain('#79537d', [[0, 235], [93, 188], [166, 217], [255, 159], [334, 211], [385, 185], [484, 245], [570, 217], [670, 185], [739, 225], [840, 206]]);
+      mountain('#514169', [[0, 273], [133, 258], [202, 222], [254, 242], [364, 274], [475, 239], [552, 260], [668, 215], [710, 224], [840, 264]]);
+      mountain('#30294f', [[0, 251], [95, 283], [191, 290], [253, 317], [379, 341], [533, 295], [617, 294], [740, 263], [840, 241]]);
+      mountain('#211d38', [[0, 320], [102, 317], [156, 342], [275, 348], [397, 369], [529, 359], [622, 333], [728, 321], [840, 296]]);
+      ctx.fillStyle = '#f9c69f';
+      for (const [x, y] of [[95, 54], [180, 91], [256, 45], [364, 74], [670, 74], [760, 49], [725, 110]]) ctx.fillRect(x, y, 2, 2);
+      canvas.toBlob(blob => {
+        if (blob && current === loadId) openImage(new File([blob], 'dusk-at-mesa-valley.png', { type: 'image/png' }), true);
+      });
+    }
+
+    $('choose').onclick = () => $('file').click();
+    $('file').onchange = () => {
+      const file = $('file').files[0];
+      if (file) openImage(file);
+      $('file').value = '';
+    };
+    $('sample').onclick = sampleImage;
+    $('pick-image').onclick = () => setPicking(!picking);
+    $('preview').onload = () => {
+      const image = $('preview');
+      image.parentElement.style.setProperty('--preview-ratio', `${image.naturalWidth} / ${image.naturalHeight}`);
+      drawMarkers();
+    };
+    $('preview').onclick = event => {
+      if (!picking || !ready) return;
+      const bounds = imageBounds();
+      if (!bounds) return;
+      const x = (event.clientX - bounds.left) / bounds.width;
+      const y = (event.clientY - bounds.top) / bounds.height;
+      if (x < 0 || x >= 1 || y < 0 || y >= 1) return;
+      const limit = shadeLimit();
+      if (limit === null) notify('Enter a valid shade count first.');
+      else worker.postMessage({ type: 'pixel', x, y, limit });
+    };
+    $('location-marker').onclick = () => { $('shade-inspector').open = !$('shade-inspector').open; };
+    $('inspection-summary').onpointerenter = $('inspection-summary').onfocus = () => $('location-marker').classList.add('emphasized');
+    $('inspection-summary').onpointerleave = $('inspection-summary').onblur = () => $('location-marker').classList.remove('emphasized');
+    $('shade-inspector').ontoggle = () => {
+      const inspector = $('shade-inspector');
+      $('location-marker').setAttribute('aria-expanded', inspector.open);
+      inspectorTrigger?.setAttribute('aria-expanded', inspector.open);
+      const row = inspector.closest('.inspection-row');
+      if (row) row.hidden = !inspector.open;
+      if (inspector.open) return;
+      highlighted = undefined;
+      drawMarkers();
+    };
+    $('related-previous').onclick = () => { relatedPage--; requestRelated(); };
+    $('related-next').onclick = () => { relatedPage++; requestRelated(); };
+    $('copy-inspected').onclick = () => { if (inspected) copy(inspected.color, `${inspected.color} copied`); };
+    $('copy-recipe-swatch').onclick = () => {
+      if (inspected?.paletteColor) copy(inspected.paletteColor, `${inspected.paletteColor} copied`);
+    };
+    document.addEventListener('pointermove', event => {
+      palettePointer = event.pointerType === 'touch' ? undefined : { x: event.clientX, y: event.clientY };
+    });
+    new ResizeObserver(drawMarkers).observe($('source-frame'));
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && picking) setPicking(false);
+    });
+    const drop = $('drop');
+    window.addEventListener('dragover', event => {
+      if (event.dataTransfer.types.includes('Files')) event.preventDefault();
+    });
+    window.addEventListener('drop', event => {
+      if (event.dataTransfer.files.length) event.preventDefault();
+    });
+    drop.addEventListener('dragover', event => {
+      if (!event.dataTransfer.types.includes('Files')) return;
+      event.preventDefault();
+      event.dataTransfer.dropEffect = 'copy';
+      drop.classList.add('drag');
+    });
+    drop.addEventListener('dragleave', event => {
+      if (!drop.contains(event.relatedTarget)) drop.classList.remove('drag');
+    });
+    drop.addEventListener('drop', event => {
+      event.preventDefault();
+      drop.classList.remove('drag');
+      const file = event.dataTransfer.files[0];
+      if (file) openImage(file);
+    });
+    $('size').onchange = $('mode').onchange = $('theme').onchange = updatePalette;
+    $('filter').oninput = $('sort').onchange = restartBrowsing;
+    $('page-limit').oninput = () => {
+      restartBrowsing();
+      if (pageLimit() !== null && $('shade-inspector').open) {
+        relatedPage = 0;
+        requestRelated();
+      }
+    };
+    $('shade-limit').oninput = () => {
+      const limit = shadeLimit();
+      if (limit !== null) syncDetail(limit);
+      restartBrowsing();
+    };
+    $('shade-detail').oninput = () => {
+      setShadeLimit(detailSteps[Number($('shade-detail').value)]);
+      restartBrowsing();
+    };
+    $('clear-filters').onclick = () => {
+      $('filter').value = '';
+      setShadeLimit(distinct);
+      restartBrowsing();
+    };
+    $('previous').onclick = () => { page--; updatePage(); };
+    $('next').onclick = () => {
+      if (choseBrowseMode) {
+        nextPage();
+        return;
+      }
+      $('browse-hex').value = $('filter').value.trim();
+      $('browse-description').textContent = `Search by HEX or keep paging with your current shade limit of ${number.format(shadeLimit())}.`;
+      $('browse-choice').showModal();
+    };
+    $('browse-form').onsubmit = event => {
+      event.preventDefault();
+      choseBrowseMode = true;
+      $('filter').value = $('browse-hex').value;
+      $('browse-choice').close();
+      restartBrowsing();
+      $('filter').focus();
+    };
+    $('browse-continue').onclick = () => {
+      choseBrowseMode = true;
+      $('browse-choice').close();
+      nextPage();
+    };
+    $('browse-cancel').onclick = () => $('browse-choice').close();
+    $('copy-palette').onclick = () => copy(colors.join(', '), 'Palette copied');
+    $('export-css').onclick = () => {
+      const variables = colors.map((color, index) => `  --palette-${index + 1}: ${color};`).join('\n');
+      download(new Blob([`:root {\n${variables}\n}\n`], { type: 'text/css' }), `${stem}-palette.css`);
+    };
+    $('export-csv').onclick = () => {
+      $('export-csv').disabled = true;
+      message('Preparing the full shade CSV…');
+      worker.postMessage({ type: 'csv' });
+    };
+    sampleImage();
+  </script>
+</body>
+</html>
