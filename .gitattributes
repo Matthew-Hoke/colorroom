@@ -1,3 +1,6 @@
 * text=auto
+# The original web page is kept for reference. Leave it out of GitHub's language bar,
+# so the project is reported as what it is now: a Python app.
+legacy/** -linguist-detectable
 # Windows needs these line endings to run the launcher, including from a ZIP download.
 *.bat text eol=crlf
