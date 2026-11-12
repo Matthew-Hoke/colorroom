@@ -1,0 +1,32 @@
+{
+    // Press F5 in VS Code to run one of these (needs the Python extension).
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run Colorroom FABLE",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "colorroom",
+            "cwd": "${workspaceFolder}",
+            "justMyCode": true
+        },
+        {
+            "name": "Run the tests",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "pytest",
+            "args": ["-q"],
+            "cwd": "${workspaceFolder}",
+            "justMyCode": true
+        },
+        {
+            "name": "Analyze the sample on the command line",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "colorroom",
+            "args": ["analyze", "sample", "--palette", "triadic"],
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal"
+        }
+    ]
+}

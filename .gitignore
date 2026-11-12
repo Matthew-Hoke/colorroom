@@ -1,0 +1,12 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+build/
+dist/
+build.log
+# Written by tools/build_app.py on every build, with full paths from the computer that built it.
+packaging/*.spec
+# Local working notes, not part of the published project.
+HANDOFF.md

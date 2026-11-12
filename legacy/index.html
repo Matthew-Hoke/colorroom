@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src blob: data:; style-src 'unsafe-inline'; script-src 'unsafe-inline'; worker-src blob:">
   <meta name="theme-color" content="#f7f6f2">
-  <title>Colorroom 1.6 — Image Palette Studio</title>
+  <title>Colorroom 1.7 — Image Palette Studio</title>
   <style>
     :root { color-scheme: light; --paper: #f7f6f2; --white: #fffefa; --ink: #211d26; --muted: #635c69; --line: #dfdbe3; --accent: #5a3cb0; --tint: #eee8fa; }
     * { box-sizing: border-box; }
@@ -43,12 +43,11 @@
     .text-btn { border: 0; background: transparent; color: var(--accent); padding: 7px 12px; font-size: 13px; font-weight: 700; }
     .status { margin: 0 0 8px; min-height: 18px; font-size: 12px; color: var(--muted); }
     .status.error { color: #a12a45; }
-    .workspace { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .85fr) minmax(355px, 1.3fr); align-items: start; gap: 12px; }
-    .source-panel { position: sticky; top: 12px; }
+    .workspace { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr); align-items: start; gap: 12px; }
     .panel { min-width: 0; background: var(--white); border: 1px solid var(--line); border-radius: 13px; padding: 13px; }
     .panel-head { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
     .panel-head p { margin: 5px 0 0; }
-    .preview { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: center; overflow: hidden; aspect-ratio: var(--preview-ratio, 16 / 9); min-height: 140px; max-height: 270px; border-radius: 10px; background: repeating-conic-gradient(#eeeaf0 0% 25%, #f8f6f8 0% 50%) 0 0 / 20px 20px; }
+    .preview { display: grid; grid-template: minmax(0, 1fr) / minmax(0, 1fr); place-items: center; overflow: hidden; width: 100%; aspect-ratio: var(--preview-ratio, 16 / 9); min-height: 140px; max-height: 270px; border-radius: 10px; background: repeating-conic-gradient(#eeeaf0 0% 25%, #f8f6f8 0% 50%) 0 0 / 20px 20px; }
     .preview img { width: 100%; height: 100%; object-fit: contain; }
     .preview img.picking { cursor: crosshair; }
     .preview [hidden] { display: none; }
@@ -61,6 +60,11 @@
     .inspection summary { cursor: pointer; font-size: 13px; font-weight: 700; }
     .inspection .small { margin: 5px 0; }
     .related-shades { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 6px; }
+    .tone-picker { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin: 7px 0; }
+    .tone-picker .chip[aria-pressed=true] { border-color: var(--accent); background: var(--tint); color: var(--accent); }
+    .shade-range { margin-top: 10px; border-top: 1px solid var(--line); padding-top: 8px; }
+    .shade-range-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin-top: 7px; font-size: 12px; }
+    .shade-range-controls input { flex: 1 1 110px; min-width: 0; accent-color: var(--accent); }
     .inspection-row td { padding: 0 4px 8px; white-space: normal; }
     .inspection-row .inspection { margin-top: 4px; background: #f5f0fa; }
     .shade-locate { padding: 0; border: 0; border-radius: 5px; background: transparent; }
@@ -94,7 +98,7 @@
     .swatch code::after { content: ' ▾'; color: var(--accent); font-size: 10px; }
     .source-match { margin: 8px 0 0; color: var(--accent); }
     .actions { margin-top: 11px; }
-    .inventory { align-self: start; }
+    .inventory { grid-column: 1 / -1; }
     .filters { display: flex; align-items: center; flex-wrap: wrap; gap: 9px; margin-bottom: 10px; }
     .filters input { width: 160px; }
     .filters #page-limit { width: 70px; }
@@ -124,14 +128,11 @@
     .toast { position: fixed; right: 20px; bottom: 20px; background: var(--ink); color: white; border-radius: 9px; padding: 9px 14px; z-index: 1; }
     .toast:empty { display: none; }
     @media (min-width: 980px) {
-      .preview { max-height: clamp(215px, 46vh, 440px); }
+      .preview { max-height: clamp(180px, 32vh, 320px); }
+      .inventory-controls { display: grid; grid-template-columns: minmax(300px, .85fr) minmax(0, 1.15fr); align-items: center; gap: 14px; margin-bottom: 10px; }
+      .inventory-controls .detail, .inventory-controls .filters { margin-bottom: 0; }
       .table-wrap { max-height: clamp(210px, calc(100vh - 500px), 600px); }
       th { position: sticky; top: 0; z-index: 1; background: var(--white); }
-    }
-    @media (max-width: 979px) {
-      .workspace { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .inventory { grid-column: 1 / -1; }
-      .source-panel { position: static; }
     }
     @media (max-width: 580px) {
       .wrap { width: calc(100% - 24px); }
@@ -143,7 +144,7 @@
   </style>
 </head>
 <body>
-  <header><div class="wrap mast"><div class="brand"><span class="mark" aria-hidden="true"></span>Colorroom</div><span class="badge">v1.6<span class="badge-label"> · Runs on your device</span></span></div></header>
+  <header><div class="wrap mast"><div class="brand"><span class="mark" aria-hidden="true"></span>Colorroom</div><span class="badge">v1.7<span class="badge-label"> · Runs on your device</span></span></div></header>
   <main class="wrap">
     <section class="hero" aria-labelledby="title">
       <div><p class="eyebrow">Image palette studio</p><h1 id="title">Find the colors in any image.</h1><p class="intro">Extract every HEX shade and build palettes from your image.</p></div>
@@ -168,9 +169,17 @@
         <div class="actions"><button class="btn" id="pick-image" aria-pressed="false" disabled>Pick from image</button><span class="small" id="pick-help" hidden>Click a spot in the image, or pick HEX values from All Shades.</span></div>
         <div id="source-inspector"><details class="inspection" id="shade-inspector" hidden>
           <summary id="inspection-summary">Related shades</summary>
+          <div class="tone-picker" id="tone-picker" aria-label="Filter family by tone"></div>
           <p class="small" id="inspection-note" role="status"></p>
           <div class="related-shades" id="related-shades"></div>
           <div class="actions"><button class="btn" id="copy-inspected" type="button">Copy HEX</button><button class="btn" id="copy-recipe-swatch" type="button" hidden>Copy palette HEX</button><button class="btn" id="related-previous" type="button" hidden>Previous shades</button><button class="btn primary" id="related-next" type="button" hidden>More shades</button></div>
+          <details class="shade-range" id="shade-range" hidden>
+            <summary id="shade-range-title">Shade range</summary>
+            <div class="shade-range-controls"><label for="range-limit">Maximum color difference</label><input id="range-limit" type="range" min="0.1" max="100" step="0.1" value="8"><output id="range-value" for="range-limit">8%</output></div>
+            <p class="small" id="range-note" role="status"></p>
+            <div class="related-shades" id="range-shades"></div>
+            <div class="actions"><button class="btn" id="copy-range" type="button">Copy shade HEX</button><button class="btn" id="range-previous" type="button" hidden>Previous shades</button><button class="btn primary" id="range-next" type="button" hidden>More shades</button></div>
+          </details>
         </details></div>
       </section>
       <section class="panel palette-panel" aria-labelledby="palette-title">
@@ -193,6 +202,7 @@
     <section class="panel inventory" aria-labelledby="inventory-title">
       <div class="panel-head"><div><h2 id="inventory-title">Image colors</h2><p class="small" id="count">Every distinct HEX value in the image.</p></div><button class="btn" id="export-csv" disabled>Export all as CSV</button></div>
       <p class="small list-help">Hover a HEX code to locate a pixel. Click it to expand related shades from the image.</p>
+      <div class="inventory-controls">
       <div class="detail">
         <div class="detail-head"><label for="shade-limit">Shades to show</label><input type="number" id="shade-limit" min="1" max="1" step="1" inputmode="numeric" aria-describedby="detail-help" disabled></div>
         <input type="range" id="shade-detail" min="0" max="0" value="0" aria-label="Shade detail" aria-describedby="detail-help" disabled>
@@ -204,6 +214,7 @@
         <span class="option"><label for="sort">Sort</label><select id="sort" disabled><option value="variety">Color variety</option><option value="frequency">Most frequent</option><option value="hex">HEX ascending</option></select></span>
         <span class="option"><label for="page-limit">Page limit</label><input type="number" id="page-limit" min="1" max="1398102" step="1" value="15" inputmode="numeric" disabled></span>
         <button type="button" class="btn" id="clear-filters" disabled>Clear filters</button>
+      </div>
       </div>
       <div class="table-wrap" id="color-table" role="region" aria-label="Image color results" tabindex="0"><table><thead><tr><th scope="col">Swatch</th><th scope="col">HEX</th><th scope="col">Pixels</th><th scope="col">Image share</th><th scope="col">Palette</th></tr></thead><tbody id="rows"><tr><td colspan="5">No colors loaded.</td></tr></tbody></table></div>
       <div class="pager"><span class="small" id="page-info" role="status"></span><button class="btn" id="previous" disabled>Previous</button><button class="btn" id="next" disabled>More colors</button></div>
@@ -225,9 +236,11 @@
     const PAGE_SIZE = 12;
     let counts, hexOrder, frequencyOrder, varietyOrder, candidates, visiblePixels, sourceContext;
     let focusedMask, focusedLimit;
-    let colorLocations, relatedBase, relatedChoices, matchKeys, matchLab;
+    let colorLocations, relatedBase, relatedChoices, relatedTones, rangeBase, rangeChoices, matchKeys, matchLab;
     const sourceMatches = new Map();
     const RELATED_PAGE_SIZE = 8;
+    const toneNames = ['Deep', 'Dark', 'Midtone', 'Bright', 'Light'];
+    const toneLimits = [.32, .47, .62, .78];
 
     const hex = key => '#' + key.toString(16).padStart(6, '0').toUpperCase();
 
@@ -403,32 +416,45 @@
       const [baseLight, baseA, baseB] = toLab(base);
       const baseChroma = Math.hypot(baseA, baseB);
       const neutral = .035;
-      const options = new Map();
-      function consider(key) {
-        if (key === base || options.has(key)) return;
+      const options = [];
+      for (const key of hexOrder) {
+        if (key === base) continue;
         const [light, a, b] = toLab(key);
         const chroma = Math.hypot(a, b);
         const sameFamily = baseChroma < neutral ? chroma < neutral
           : chroma >= neutral && a * baseA + b * baseB >= .866 * chroma * baseChroma;
-        if (!sameFamily) return;
+        if (!sameFamily) continue;
         const distance = (light - baseLight) ** 2 + (a - baseA) ** 2 + (b - baseB) ** 2;
-        options.set(key, { key, distance });
+        let tone = 0;
+        while (tone < toneLimits.length && light >= toneLimits[tone]) tone++;
+        options.push({ key, distance, tone });
       }
-      if (hexOrder.length <= 250000) {
-        for (const key of hexOrder) consider(key);
-      } else {
-        for (const { key } of candidates) consider(key);
-        const binStart = base & 0xF8F8F8;
-        for (let red = 0; red < 8; red++) {
-          for (let green = 0; green < 8; green++) {
-            for (let blue = 0; blue < 8; blue++) {
-              const key = binStart | (red << 16) | (green << 8) | blue;
-              if (counts[key]) consider(key);
-            }
-          }
-        }
+      return options.sort((a, b) => a.distance - b.distance || counts[b.key] - counts[a.key] || a.key - b.key);
+    }
+
+    function groupTones(shades) {
+      const groups = toneNames.map((name, tone) => ({ name, tone, shades: [] }));
+      for (const shade of shades) groups[shade.tone].shades.push(shade);
+      for (const group of groups) {
+        group.shades.sort((a, b) => byFrequency(a.key, b.key));
       }
-      return [...options.values()].sort((a, b) => a.distance - b.distance || counts[b.key] - counts[a.key] || a.key - b.key);
+      return groups;
+    }
+
+    function shadeEntry({ key, distance }) {
+      return { color: hex(key), point: locateColor(key), difference: Math.min(100, Math.sqrt(distance) * 100) };
+    }
+
+    function rangeTotal(shades, maximum) {
+      if (maximum === 100) return shades.length;
+      const distance = (maximum / 100) ** 2;
+      let start = 0, end = shades.length;
+      while (start < end) {
+        const middle = (start + end) >>> 1;
+        if (shades[middle].distance <= distance) start = middle + 1;
+        else end = middle;
+      }
+      return start;
     }
 
     function buildPalette(size, mode) {
@@ -523,13 +549,25 @@
           const key = parseInt(data.color.slice(1), 16);
           if (relatedBase !== key) {
             relatedChoices = relatedColors(key);
+            relatedTones = groupTones(relatedChoices);
             relatedBase = key;
           }
+          const choices = data.tone === null || data.tone === undefined ? relatedChoices : relatedTones[data.tone].shades;
           const start = data.page * RELATED_PAGE_SIZE;
-          const related = relatedChoices.slice(start, start + RELATED_PAGE_SIZE).map(({ key: shade, distance }) => ({
-            color: hex(shade), point: locateColor(shade), difference: Math.min(100, Math.sqrt(distance) * 100)
-          }));
-          postMessage({ type: 'inspect', request: data.request, point: locateColor(key), related, total: relatedChoices.length, size: RELATED_PAGE_SIZE });
+          const related = choices.slice(start, start + RELATED_PAGE_SIZE).map(shadeEntry);
+          const tones = relatedTones.filter(group => group.shades.length).map(({ name, tone, shades }) => ({ name, tone, count: shades.length, ...shadeEntry(shades[0]) }));
+          postMessage({ type: 'inspect', request: data.request, point: locateColor(key), related, tones, total: choices.length, size: RELATED_PAGE_SIZE });
+        }
+        if (data.type === 'shade-range') {
+          const key = parseInt(data.color.slice(1), 16);
+          if (rangeBase !== key) {
+            rangeChoices = relatedColors(key);
+            rangeBase = key;
+          }
+          const total = rangeTotal(rangeChoices, data.maximum);
+          const start = data.page * RELATED_PAGE_SIZE;
+          const shades = rangeChoices.slice(start, Math.min(total, start + RELATED_PAGE_SIZE)).map(shadeEntry);
+          postMessage({ type: 'shade-range', request: data.request, shades, total, size: RELATED_PAGE_SIZE });
         }
         if (data.type === 'page') {
           const { total, keys } = findPage(data.prefix, data.sort, data.page, data.limit);

@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "colorroom-fable"
+version = "2.0.0a1"
+description = "Colorroom FABLE: find the colors in any image and build palettes from them."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=2.0",
+    "Pillow>=11.3",
+    "PySide6>=6.7",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "pyinstaller>=6.10"]
+
+# "colorroom-fable" opens the window; "colorroom" is the command-line tool.
+[project.gui-scripts]
+colorroom-fable = "colorroom.__main__:main"
+
+[project.scripts]
+colorroom = "colorroom.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

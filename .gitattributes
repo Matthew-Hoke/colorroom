@@ -1,0 +1,3 @@
+* text=auto
+# Windows needs these line endings to run the launcher, including from a ZIP download.
+*.bat text eol=crlf
