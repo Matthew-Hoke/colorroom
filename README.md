@@ -128,3 +128,7 @@ To report a security problem, see [SECURITY.md](SECURITY.md).
 - The color table scrolls through every color without paging, and adds RGB and HSL columns.
 - New exports: Adobe `.ase`, GIMP `.gpl`, JSON, PNG swatch sheet.
 - An eyedropper magnifier for picking exact pixels.
+
+## Screenshot
+
+![Colorroom FABLE showing the built-in Dusk at Mesa Valley sample and its six-color palette](docs/screenshots/02-sample-balanced.png)
