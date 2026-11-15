@@ -167,7 +167,10 @@ class FlowLayout(QLayout):
         while self._items:
             widget = self._items.pop().widget()
             if widget is not None:
-                widget.setParent(None)
+                # Hide it and leave it inside its parent until it is deleted. Detaching it
+                # (setParent(None)) would let it pop up as a tiny window of its own if Qt
+                # still had a "show this" request waiting for it.
+                widget.hide()
                 widget.deleteLater()
         self.invalidate()
 
@@ -222,7 +225,9 @@ class FlowArea(QWidget):
         self.setSizePolicy(policy)
 
     def add(self, widget: QWidget) -> None:
+        widget.setParent(self)  # belongs to this area from the start, never a window of its own
         self.flow.addWidget(widget)
+        widget.show()
 
     def clear(self) -> None:
         self.flow.clear()
@@ -237,10 +242,19 @@ class FlowArea(QWidget):
         # Report the height needed at the width we actually have. Qt's default would
         # report the height of a one-item-wide column, which is far too tall.
         width = self.width() if self.width() > 0 else 360
+        if not self.isVisible():
+            # Hidden (another tab, a closed section): its width is a stale default, and
+            # wrapping at it would make the whole window taller than the screen. One row
+            # is enough until it is shown; showEvent asks for a new layout then.
+            return QSize(width, self.flow.minimumSize().height())
         return QSize(width, self.flow.heightForWidth(width))
 
     def minimumSizeHint(self) -> QSize:
         return self.flow.minimumSize()
+
+    def showEvent(self, event) -> None:
+        super().showEvent(event)
+        self.updateGeometry()
 
     def resizeEvent(self, event) -> None:
         super().resizeEvent(event)
@@ -421,7 +435,7 @@ class SwatchGrid(QWidget):
 
     def set_entries(self, entries: Sequence) -> None:
         for button in self._buttons:
-            button.setParent(None)
+            button.hide()
             button.deleteLater()
         self._buttons = []
         self._entries = tuple(entries)
@@ -515,6 +529,7 @@ class Toast(QLabel):
         super().__init__(parent)
         self.setObjectName("toast")
         self.hide()
+        self.lift = 20  # distance from the bottom of the window, raised above a footer when needed
         self._timer = QTimer(self)
         self._timer.setSingleShot(True)
         self._timer.timeout.connect(self.hide)
@@ -530,4 +545,4 @@ class Toast(QLabel):
     def reposition(self) -> None:
         parent = self.parentWidget()
         if parent is not None:
-            self.move(parent.width() - self.width() - 20, parent.height() - self.height() - 20)
+            self.move(parent.width() - self.width() - 20, parent.height() - self.height() - self.lift)

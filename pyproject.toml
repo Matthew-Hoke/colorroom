@@ -1,21 +1,27 @@
 [build-system]
-requires = ["setuptools>=69"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "colorroom-fable"
-version = "2.0.0a1"
+version = "3.0.0"
 description = "Colorroom FABLE: find the colors in any image and build palettes from them."
 readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
 requires-python = ">=3.11"
 dependencies = [
     "numpy>=2.0",
     "Pillow>=11.3",
     "PySide6>=6.7",
+    "pypdfium2>=5.0",  # PDF and Illustrator files (PDFium; Apache-2.0 / BSD-3-Clause)
+    "psd-tools>=1.10",  # Photoshop files: reading, and recolored copies (MIT)
 ]
 
 [project.optional-dependencies]
 dev = ["pytest>=8", "pyinstaller>=6.10"]
+# Lets Colorroom drive Photoshop, Illustrator and InDesign on Windows ("Export to Photoshop").
+adobe = ["pywin32>=306; sys_platform == 'win32'"]
 
 # "colorroom-fable" opens the window; "colorroom" is the command-line tool.
 [project.gui-scripts]
@@ -30,3 +36,9 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+# Live tests drive the real program on this computer; they run only with COLORROOM_LIVE=1.
+markers = [
+    "photoshop: drives Photoshop on this computer (COLORROOM_LIVE=1 only)",
+    "illustrator: drives Illustrator on this computer (COLORROOM_LIVE=1 only)",
+    "indesign: drives InDesign on this computer (COLORROOM_LIVE=1 only)",
+]

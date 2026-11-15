@@ -10,3 +10,7 @@ build.log
 packaging/*.spec
 # Local working notes, not part of the published project.
 HANDOFF.md
+MASTER_PLAN.md
+REVIEW.md
+# The user's own test files for the Photoshop, Illustrator and InDesign round trip.
+test-kit/

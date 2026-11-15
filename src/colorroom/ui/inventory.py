@@ -10,7 +10,7 @@ from typing import Optional
 
 import numpy as np
 from PySide6.QtCore import QAbstractTableModel, QModelIndex, QRectF, QSize, Qt, Signal
-from PySide6.QtGui import QColor, QPainter, QPen
+from PySide6.QtGui import QColor, QGuiApplication, QPainter, QPen
 from PySide6.QtWidgets import QAbstractItemView, QHeaderView, QStyledItemDelegate, QTableView, QWidget
 
 from ..core.colorspace import key_to_rgb, to_hsl
@@ -173,6 +173,7 @@ class InventoryView(QTableView):
     rowHovered = Signal(int)  # distinct index under the pointer, or -1
     rowActivated = Signal(int)  # distinct index clicked or moved to with the keyboard
     pickToggled = Signal(str)  # HEX color whose Pick pill was clicked
+    selectionCountChanged = Signal(int)  # how many rows are selected
 
     def __init__(self, parent: Optional[QWidget] = None) -> None:
         super().__init__(parent)
@@ -186,7 +187,8 @@ class InventoryView(QTableView):
         self.setShowGrid(False)
         self.setWordWrap(False)
         self.setSelectionBehavior(QAbstractItemView.SelectionBehavior.SelectRows)
-        self.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)
+        # Ctrl-click or Shift-click selects several rows, to add them to My palette together.
+        self.setSelectionMode(QAbstractItemView.SelectionMode.ExtendedSelection)
         self.setEditTriggers(QAbstractItemView.EditTrigger.NoEditTriggers)
         self.setVerticalScrollMode(QAbstractItemView.ScrollMode.ScrollPerPixel)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
@@ -203,10 +205,11 @@ class InventoryView(QTableView):
         header.setMinimumSectionSize(40)
         header.setSectionResizeMode(QHeaderView.ResizeMode.Fixed)
         header.setStretchLastSection(False)
-        self.setMinimumHeight(ROW_HEIGHT * 3 + 36)
+        self.setMinimumHeight(ROW_HEIGHT * 2 + 36)  # small screens: the window fits 1280 × 720
         self._fit_columns()
         self.selectionModel().currentRowChanged.connect(self._current_changed)
         self._model.modelReset.connect(self._rows_replaced)
+        self.selectionModel().selectionChanged.connect(lambda *_: self.selectionCountChanged.emit(len(self.selected_rows())))
 
     @property
     def inventory(self) -> InventoryModel:
@@ -216,10 +219,24 @@ class InventoryView(QTableView):
         self._empty_text = text
         self.viewport().update()
 
+    def selected_rows(self) -> list[int]:
+        return sorted(index.row() for index in self.selectionModel().selectedRows())
+
+    def selected_colors(self) -> list[str]:
+        """HEX codes of the selected rows, top to bottom."""
+        return [self._model.color(row) for row in self.selected_rows()]
+
     def select_distinct(self, distinct_index: Optional[int], scroll: bool = False) -> None:
         """Highlight the row of a color (if listed) without announcing it as a click."""
         row = -1 if distinct_index is None else self._model.row_of(distinct_index)
         selection = self.selectionModel()
+        modifiers = QGuiApplication.keyboardModifiers()
+        extending = bool(modifiers & (Qt.KeyboardModifier.ControlModifier | Qt.KeyboardModifier.ShiftModifier))
+        chosen = self.selected_rows()
+        if extending or (len(chosen) > 1 and row in chosen):
+            # The user is selecting several rows: leave their selection alone.
+            self.viewport().update()
+            return
         selection.blockSignals(True)
         if row < 0:
             selection.clear()
@@ -228,6 +245,7 @@ class InventoryView(QTableView):
             if scroll:
                 self.scrollTo(self._model.index(row, HEX), QAbstractItemView.ScrollHint.EnsureVisible)
         selection.blockSignals(False)
+        self.selectionCountChanged.emit(len(self.selected_rows()))
         self.viewport().update()
 
     # --- layout ------------------------------------------------------------------------

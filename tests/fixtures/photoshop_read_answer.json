@@ -1,0 +1,575 @@
+{
+ "format": "colorroom-manifest",
+ "manifest_version": 1,
+ "program": "Photoshop",
+ "program_version": "27.4.0",
+ "document": "ps-bridge-test.psd",
+ "source": "C:/Colorroom/test-kit/ps-bridge-test.psd",
+ "saved": true,
+ "color_mode": "RGB",
+ "bit_depth": 8,
+ "width": 800,
+ "height": 600,
+ "resolution": 144,
+ "color_profile": "sRGB IEC61966-2.1",
+ "layer_comps": 1,
+ "layers": [
+  {
+   "id": 18,
+   "name": "Caption",
+   "ps_kind": 3,
+   "kind": "text",
+   "detail": "text",
+   "own_visible": true,
+   "visible": true,
+   "group_locked": "",
+   "path": "Caption",
+   "bounds": [
+    41,
+    105,
+    156,
+    126
+   ],
+   "lock": "",
+   "color_locked": false,
+   "locked": false,
+   "notes": [],
+   "text": "one color",
+   "missing_fonts": [],
+   "adjustments": [],
+   "parts": [
+    {
+     "key": "text/textStyleRange/0/textStyle/color",
+     "hex": "#1D3557",
+     "exact": true,
+     "model": "rgb",
+     "stop": null,
+     "range": [
+      0,
+      10
+     ]
+    }
+   ],
+   "signature": "[\"Caption\",3,true,[41,105,156,126],\"\",[],[],\"one color\",[[0,10,\"ArialMT\",14]],null]",
+   "order": 0
+  },
+  {
+   "id": 16,
+   "name": "Headline",
+   "ps_kind": 3,
+   "kind": "text",
+   "detail": "text",
+   "own_visible": true,
+   "visible": true,
+   "group_locked": "",
+   "path": "Headline",
+   "bounds": [
+    43,
+    31,
+    581,
+    91
+   ],
+   "lock": "",
+   "color_locked": false,
+   "locked": false,
+   "notes": [],
+   "text": "Colorroom Test",
+   "missing_fonts": [],
+   "adjustments": [],
+   "parts": [
+    {
+     "key": "text/textStyleRange/0/textStyle/color",
+     "hex": "#111827",
+     "exact": true,
+     "model": "rgb",
+     "stop": null,
+     "range": [
+      0,
+      10
+     ]
+    },
+    {
+     "key": "text/textStyleRange/1/textStyle/color",
+     "hex": "#E63946",
+     "exact": true,
+     "model": "rgb",
+     "stop": null,
+     "range": [
+      10,
+      15
+     ]
+    }
+   ],
+   "signature": "[\"Headline\",3,true,[43,31,581,91],\"\",[],[],\"Colorroom Test\",[[0,10,\"ArialMT\",40],[10,15,\"ArialMT\",40]],null]",
+   "order": 1
+  },
+  {
+   "id": 10,
+   "name": "Group A",
+   "ps_kind": 7,
+   "kind": "group",
+   "detail": "group",
+   "own_visible": true,
+   "visible": true,
+   "group_locked": "",
+   "path": "Group A",
+   "bounds": [
+    0,
+    0,
+    800,
+    600
+   ],
+   "lock": "",
+   "color_locked": false,
+   "locked": false,
+   "notes": [],
+   "adjustments": [],
+   "parts": [],
+   "signature": "[\"Group A\",7,true,[0,0,800,600],\"\",[],[],null,[],null]",
+   "order": 2
+  },
+  {
+   "id": 14,
+   "name": "Hidden fill",
+   "ps_kind": 11,
+   "kind": "fill",
+   "detail": "solid color fill",
+   "own_visible": false,
+   "visible": false,
+   "group_locked": "",
+   "path": "Group A / Hidden fill",
+   "bounds": [
+    690,
+    20,
+    770,
+    80
+   ],
+   "lock": "",
+   "color_locked": false,
+   "locked": false,
+   "notes": [],
+   "adjustments": [
+    "solidColorLayer"
+   ],
+   "parts": [
+    {
+     "key": "adj/0/solidColorLayer/color",
+     "hex": "#E63946",
+     "exact": true,
+     "model": "rgb",
+     "stop": null
+    }
+   ],
+   "signature": "[\"Hidden fill\",11,false,[690,20,770,80],\"\",[\"solidColorLayer\"],[],null,[],null]",
+   "order": 3
+  },
+  {
+   "id": 13,
+   "name": "Locked fill",
+   "ps_kind": 11,
+   "kind": "fill",
+   "detail": "solid color fill",
+   "own_visible": true,
+   "visible": true,
+   "group_locked": "",
+   "path": "Group A / Locked fill",
+   "bounds": [
+    600,
+    20,
+    680,
+    80
+   ],
+   "lock": "all",
+   "color_locked": true,
+   "locked": true,
+   "notes": [],
+   "adjustments": [
+    "solidColorLayer"
+   ],
+   "parts": [
+    {
+     "key": "adj/0/solidColorLayer/color",
+     "hex": "#E63946",
+     "exact": true,
+     "model": "rgb",
+     "stop": null
+    }
+   ],
+   "signature": "[\"Locked fill\",11,true,[600,20,680,80],\"all\",[\"solidColorLayer\"],[],null,[],null]",
+   "order": 4
+  },
+  {
+   "id": 12,
+   "name": "Badge",
+   "ps_kind": 1,
+   "kind": "image",
+   "detail": "pixel layer",
+   "own_visible": true,
+   "visible": true,
+   "group_locked": "",
+   "path": "Group A / Badge",
+   "bounds": [
+    594,
+    164,
+    766,
+    326
+   ],
+   "lock": "",
+   "color_locked": false,
+   "locked": false,
+   "notes": [],
+   "adjustments": [],
+   "parts": [
+    {
+     "key": "fx/dropShadowMulti/0/color",
+     "hex": "#000000",
+     "exact": true,
+     "model": "rgb",
+     "stop": null,
+     "effect": "dropShadowMulti",
+     "off": true
+    },
+    {
+     "key": "fx/innerShadowMulti/0/color",
+     "hex": "#000000",
+     "exact": true,
+     "model": "rgb",
+     "stop": null,
+     "effect": "innerShadowMulti",
+     "off": true
+    },
+    {
+     "key": "fx/solidFill/color",
+     "hex": "#2A9D8F",
+     "exact": true,
+     "model": "rgb",
+     "stop": null,
+     "effect": "solidFill",
+     "off": false
+    },
+    {
+     "key": "fx/gradientFillMulti/0/gradient/colors/0/color",
+     "hex": "#D7D7D7",
+     "exact": true,
+     "model": "rgb",
+     "stop": {
+      "location": 0,
+      "type": "userStop"
+     },
+     "effect": "gradientFillMulti",
+     "off": true
+    },
+    {
+     "key": "fx/gradientFillMulti/0/gradient/colors/1/color",
+     "hex": "#FFFFFF",
+     "exact": true,
+     "model": "rgb",
+     "stop": {
+      "location": 4096,
+      "type": "userStop"
+     },
+     "effect": "gradientFillMulti",
+     "off": true
+    },
+    {
+     "key": "fx/frameFX/color",
+     "hex": "#264653",
+     "exact": true,
+     "model": "rgb",
+     "stop": null,
+     "effect": "frameFX",
+     "off": false
+    }
+   ],
+   "signature": "[\"Badge\",1,true,[594,164,766,326],\"\",[],[\"fx/dropShadowMulti/0-\",\"fx/innerShadowMulti/0-\",\"fx/solidFill+\",\"fx/gradientFillMulti/0-\",\"fx/frameFX+\"],null,[],null]",
+   "order": 5
+  },
+  {
+   "id": 9,
+   "name": "Rectangle",
+   "ps_kind": 4,
+   "kind": "shape",
+   "detail": "shape",
+   "own_visible": true,
+   "visible": true,
+   "group_locked": "",
+   "path": "Rectangle",
+   "bounds": [
+    400,
+    150,
+    560,
+    340
+   ],
+   "lock": "",
+   "color_locked": false,
+   "locked": false,
+   "notes": [],
+   "stroke_on": true,
+   "fill_on": true,
+   "adjustments": [
+    "solidColorLayer"
+   ],
+   "parts": [
+    {
+     "key": "adj/0/solidColorLayer/color",
+     "hex": "#457B9D",
+     "exact": true,
+     "model": "rgb",
+     "stop": null
+    },
+    {
+     "key": "stroke/strokeStyleContent/color",
+     "hex": "#1D3557",
+     "exact": true,
+     "model": "rgb",
+     "stop": null,
+     "off": false
+    }
+   ],
+   "signature": "[\"Rectangle\",4,true,[400,150,560,340],\"\",[\"solidColorLayer\"],[],null,[],true]",
+   "order": 6
+  },
+  {
+   "id": 8,
+   "name": "Gradient fill",
+   "ps_kind": 9,
+   "kind": "fill",
+   "detail": "gradient fill",
+   "own_visible": true,
+   "visible": true,
+   "group_locked": "",
+   "path": "Gradient fill",
+   "bounds": [
+    200,
+    150,
+    380,
+    340
+   ],
+   "lock": "",
+   "color_locked": false,
+   "locked": false,
+   "notes": [],
+   "adjustments": [
+    "gradientLayer"
+   ],
+   "parts": [
+    {
+     "key": "adj/0/gradientLayer/gradient/colors/0/color",
+     "hex": "#A8DADC",
+     "exact": true,
+     "model": "rgb",
+     "stop": {
+      "location": 0,
+      "type": "userStop"
+     }
+    },
+    {
+     "key": "adj/0/gradientLayer/gradient/colors/1/color",
+     "hex": "#6D597A",
+     "exact": true,
+     "model": "rgb",
+     "stop": {
+      "location": 4096,
+      "type": "userStop"
+     }
+    }
+   ],
+   "signature": "[\"Gradient fill\",9,true,[200,150,380,340],\"\",[\"gradientLayer\"],[],null,[],null]",
+   "order": 7
+  },
+  {
+   "id": 7,
+   "name": "Solid fill",
+   "ps_kind": 11,
+   "kind": "fill",
+   "detail": "solid color fill",
+   "own_visible": true,
+   "visible": true,
+   "group_locked": "",
+   "path": "Solid fill",
+   "bounds": [
+    20,
+    150,
+    180,
+    340
+   ],
+   "lock": "",
+   "color_locked": false,
+   "locked": false,
+   "notes": [],
+   "adjustments": [
+    "solidColorLayer"
+   ],
+   "parts": [
+    {
+     "key": "adj/0/solidColorLayer/color",
+     "hex": "#E63946",
+     "exact": true,
+     "model": "rgb",
+     "stop": null
+    }
+   ],
+   "signature": "[\"Solid fill\",11,true,[20,150,180,340],\"\",[\"solidColorLayer\"],[],null,[],null]",
+   "order": 8
+  },
+  {
+   "id": 6,
+   "name": "Gradient Map",
+   "ps_kind": 2,
+   "kind": "adjustment",
+   "detail": "gradient map",
+   "own_visible": true,
+   "visible": true,
+   "group_locked": "",
+   "path": "Gradient Map",
+   "bounds": [
+    0,
+    0,
+    800,
+    600
+   ],
+   "lock": "",
+   "color_locked": false,
+   "locked": false,
+   "notes": [],
+   "adjustments": [
+    "gradientMapClass"
+   ],
+   "parts": [
+    {
+     "key": "adj/0/gradientMapClass/gradient/colors/0/color",
+     "hex": "#1D3557",
+     "exact": true,
+     "model": "rgb",
+     "stop": {
+      "location": 0,
+      "type": "userStop"
+     }
+    },
+    {
+     "key": "adj/0/gradientMapClass/gradient/colors/1/color",
+     "hex": "#F4A261",
+     "exact": true,
+     "model": "rgb",
+     "stop": {
+      "location": 2048,
+      "type": "userStop"
+     }
+    },
+    {
+     "key": "adj/0/gradientMapClass/gradient/colors/2/color",
+     "hex": "#F1FAEE",
+     "exact": true,
+     "model": "rgb",
+     "stop": {
+      "location": 4096,
+      "type": "userStop"
+     }
+    }
+   ],
+   "signature": "[\"Gradient Map\",2,true,[0,0,800,600],\"\",[\"gradientMapClass\"],[],null,[],null]",
+   "order": 9
+  },
+  {
+   "id": 5,
+   "name": "Gray ramp",
+   "ps_kind": 1,
+   "kind": "image",
+   "detail": "pixel layer",
+   "own_visible": true,
+   "visible": true,
+   "group_locked": "",
+   "path": "Gray ramp",
+   "bounds": [
+    420,
+    380,
+    760,
+    580
+   ],
+   "lock": "",
+   "color_locked": false,
+   "locked": false,
+   "notes": [],
+   "adjustments": [],
+   "parts": [],
+   "signature": "[\"Gray ramp\",1,true,[420,380,760,580],\"\",[],[],null,[],null]",
+   "order": 10
+  },
+  {
+   "id": 4,
+   "name": "Smart photo",
+   "ps_kind": 5,
+   "kind": "smart-object",
+   "detail": "smart object",
+   "own_visible": true,
+   "visible": true,
+   "group_locked": "",
+   "path": "Smart photo",
+   "bounds": [
+    20,
+    20,
+    60,
+    60
+   ],
+   "lock": "",
+   "color_locked": false,
+   "locked": false,
+   "notes": [],
+   "adjustments": [],
+   "parts": [],
+   "signature": "[\"Smart photo\",5,true,[20,20,60,60],\"\",[],[],null,[],null]",
+   "order": 11
+  },
+  {
+   "id": 2,
+   "name": "Photo pixels",
+   "ps_kind": 1,
+   "kind": "image",
+   "detail": "pixel layer",
+   "own_visible": true,
+   "visible": true,
+   "group_locked": "",
+   "path": "Photo pixels",
+   "bounds": [
+    20,
+    380,
+    380,
+    580
+   ],
+   "lock": "",
+   "color_locked": false,
+   "locked": false,
+   "notes": [],
+   "adjustments": [],
+   "parts": [],
+   "signature": "[\"Photo pixels\",1,true,[20,380,380,580],\"\",[],[],null,[],null]",
+   "order": 12
+  },
+  {
+   "id": 1,
+   "name": "Background",
+   "ps_kind": 12,
+   "kind": "image",
+   "detail": "background",
+   "own_visible": true,
+   "visible": true,
+   "group_locked": "",
+   "path": "Background",
+   "bounds": [
+    0,
+    0,
+    800,
+    600
+   ],
+   "lock": "position, transparency, artboard nesting",
+   "color_locked": false,
+   "locked": true,
+   "notes": [],
+   "adjustments": [],
+   "parts": [],
+   "signature": "[\"Background\",12,true,[0,0,800,600],\"position, transparency, artboard nesting\",[],[],null,[],null]",
+   "order": 13
+  }
+ ],
+ "notes": []
+}

@@ -1,0 +1,1796 @@
+{
+ "document": {
+  "name": "illustrator-test-rgb.ai",
+  "path": "illustrator-test-rgb.ai",
+  "colorMode": "RGB",
+  "width": 400,
+  "height": 300,
+  "saved": true,
+  "artboards": [
+   {
+    "name": "Poster",
+    "rect": [
+     0,
+     600,
+     800,
+     0
+    ],
+    "width": 800,
+    "height": 600
+   },
+   {
+    "name": "Card",
+    "rect": [
+     900,
+     600,
+     1300,
+     300
+    ],
+    "width": 400,
+    "height": 300
+   }
+  ]
+ },
+ "layers": [
+  {
+   "id": "L0",
+   "name": "Artwork",
+   "path": "Artwork",
+   "visible": true,
+   "locked": false,
+   "lockedWithParents": false,
+   "hiddenWithParents": false,
+   "printable": true,
+   "items": 13,
+   "sublayers": 2
+  },
+  {
+   "id": "L0.L0",
+   "name": "Frozen",
+   "path": "Artwork / Frozen",
+   "visible": true,
+   "locked": true,
+   "lockedWithParents": true,
+   "hiddenWithParents": false,
+   "printable": true,
+   "items": 1,
+   "sublayers": 0
+  },
+  {
+   "id": "L0.L1",
+   "name": "Details",
+   "path": "Artwork / Details",
+   "visible": true,
+   "locked": false,
+   "lockedWithParents": false,
+   "hiddenWithParents": false,
+   "printable": true,
+   "items": 1,
+   "sublayers": 0
+  },
+  {
+   "id": "L1",
+   "name": "Background",
+   "path": "Background",
+   "visible": true,
+   "locked": false,
+   "lockedWithParents": false,
+   "hiddenWithParents": false,
+   "printable": true,
+   "items": 2,
+   "sublayers": 0
+  }
+ ],
+ "items": [
+  {
+   "id": "L0/0",
+   "kind": "path",
+   "name": "Card art",
+   "layer": "Artwork",
+   "locked": false,
+   "hidden": false,
+   "bounds": [
+    920,
+    580,
+    1280,
+    320
+   ],
+   "fill": {
+    "type": "rgb",
+    "values": [
+     245,
+     158,
+     11
+    ],
+    "hex": "#F59E0B"
+   },
+   "stroke": {
+    "type": "rgb",
+    "values": [
+     17,
+     24,
+     39
+    ],
+    "hex": "#111827"
+   },
+   "strokeWidth": 3
+  },
+  {
+   "id": "L0/1",
+   "kind": "path",
+   "name": "Global tint",
+   "layer": "Artwork",
+   "locked": false,
+   "hidden": false,
+   "bounds": [
+    360,
+    280,
+    390,
+    250
+   ],
+   "fill": {
+    "type": "global",
+    "swatch": "Brand Green",
+    "tint": 50,
+    "hex": "#16A34A",
+    "base": {
+     "type": "rgb",
+     "values": [
+      22,
+      163,
+      74
+     ],
+     "hex": "#16A34A"
+    }
+   },
+   "stroke": null
+  },
+  {
+   "id": "L0/2",
+   "kind": "path",
+   "name": "Hidden box",
+   "layer": "Artwork",
+   "locked": false,
+   "hidden": true,
+   "bounds": [
+    680,
+    460,
+    740,
+    400
+   ],
+   "fill": {
+    "type": "rgb",
+    "values": [
+     29,
+     78,
+     216
+    ],
+    "hex": "#1D4ED8"
+   },
+   "stroke": null
+  },
+  {
+   "id": "L0/3",
+   "kind": "path",
+   "name": "Locked box",
+   "layer": "Artwork",
+   "locked": true,
+   "hidden": false,
+   "bounds": [
+    600,
+    460,
+    660,
+    400
+   ],
+   "fill": {
+    "type": "rgb",
+    "values": [
+     29,
+     78,
+     216
+    ],
+    "hex": "#1D4ED8"
+   },
+   "stroke": null
+  },
+  {
+   "id": "L0/4",
+   "kind": "path",
+   "name": "Spot rect",
+   "layer": "Artwork",
+   "locked": false,
+   "hidden": false,
+   "bounds": [
+    240,
+    240,
+    340,
+    180
+   ],
+   "fill": {
+    "type": "spot",
+    "swatch": "Spot Orange",
+    "tint": 100,
+    "hex": "#F97316",
+    "base": {
+     "type": "rgb",
+     "values": [
+      249,
+      115,
+      22
+     ],
+     "hex": "#F97316"
+    }
+   },
+   "stroke": null
+  },
+  {
+   "id": "L0/5",
+   "kind": "path",
+   "name": "Global B",
+   "layer": "Artwork",
+   "locked": false,
+   "hidden": false,
+   "bounds": [
+    360,
+    330,
+    390,
+    300
+   ],
+   "fill": {
+    "type": "global",
+    "swatch": "Brand Green",
+    "tint": 100,
+    "hex": "#16A34A",
+    "base": {
+     "type": "rgb",
+     "values": [
+      22,
+      163,
+      74
+     ],
+     "hex": "#16A34A"
+    }
+   },
+   "stroke": null
+  },
+  {
+   "id": "L0/6",
+   "kind": "path",
+   "name": "Global A",
+   "layer": "Artwork",
+   "locked": false,
+   "hidden": false,
+   "bounds": [
+    240,
+    330,
+    340,
+    270
+   ],
+   "fill": {
+    "type": "global",
+    "swatch": "Brand Green",
+    "tint": 100,
+    "hex": "#16A34A",
+    "base": {
+     "type": "rgb",
+     "values": [
+      22,
+      163,
+      74
+     ],
+     "hex": "#16A34A"
+    }
+   },
+   "stroke": null
+  },
+  {
+   "id": "L0/7",
+   "kind": "path",
+   "name": "Sky",
+   "layer": "Artwork",
+   "locked": false,
+   "hidden": false,
+   "bounds": [
+    400,
+    340,
+    760,
+    220
+   ],
+   "fill": {
+    "type": "gradient",
+    "gradient": "Test Sky"
+   },
+   "stroke": null
+  },
+  {
+   "id": "L0/8",
+   "kind": "text",
+   "name": "Headline",
+   "layer": "Artwork",
+   "locked": false,
+   "hidden": false,
+   "bounds": [
+    40,
+    150.1318,
+    272.4609,
+    97.9561
+   ],
+   "runs": [
+    {
+     "start": 0,
+     "length": 6,
+     "fill": {
+      "type": "rgb",
+      "values": [
+       17,
+       24,
+       39
+      ],
+      "hex": "#111827"
+     },
+     "stroke": null
+    },
+    {
+     "start": 6,
+     "length": 5,
+     "fill": {
+      "type": "rgb",
+      "values": [
+       225,
+       29,
+       72
+      ],
+      "hex": "#E11D48"
+     },
+     "stroke": null
+    }
+   ],
+   "fonts": [
+    "MyriadPro-Regular"
+   ],
+   "missingFonts": [],
+   "chars": 11,
+   "text": "Hello World"
+  },
+  {
+   "id": "L0/9",
+   "kind": "clip-group",
+   "name": "Clipped star",
+   "layer": "Artwork",
+   "locked": false,
+   "hidden": false,
+   "bounds": [
+    53.426,
+    340,
+    186.574,
+    213.3688
+   ],
+   "children": 2
+  },
+  {
+   "id": "L0/9.0",
+   "kind": "path",
+   "name": "Mask",
+   "layer": "Artwork",
+   "locked": false,
+   "hidden": false,
+   "bounds": [
+    60,
+    330,
+    180,
+    240
+   ],
+   "clipping": true,
+   "fill": null,
+   "stroke": null
+  },
+  {
+   "id": "L0/9.1",
+   "kind": "path",
+   "name": "Star",
+   "layer": "Artwork",
+   "locked": false,
+   "hidden": false,
+   "bounds": [
+    53.426,
+    340,
+    186.574,
+    213.3688
+   ],
+   "fill": {
+    "type": "rgb",
+    "values": [
+     16,
+     185,
+     129
+    ],
+    "hex": "#10B981"
+   },
+   "stroke": null
+  },
+  {
+   "id": "L0/10",
+   "kind": "group",
+   "name": "Badge",
+   "layer": "Artwork",
+   "locked": false,
+   "hidden": false,
+   "bounds": [
+    600,
+    540,
+    740,
+    480
+   ],
+   "children": 2
+  },
+  {
+   "id": "L0/10.0",
+   "kind": "path",
+   "name": "Badge dot",
+   "layer": "Artwork",
+   "locked": false,
+   "hidden": false,
+   "bounds": [
+    610,
+    530,
+    650,
+    490
+   ],
+   "fill": {
+    "type": "rgb",
+    "values": [
+     29,
+     78,
+     216
+    ],
+    "hex": "#1D4ED8"
+   },
+   "stroke": null
+  },
+  {
+   "id": "L0/10.1",
+   "kind": "path",
+   "name": "Badge back",
+   "layer": "Artwork",
+   "locked": false,
+   "hidden": false,
+   "bounds": [
+    600,
+    540,
+    740,
+    480
+   ],
+   "fill": {
+    "type": "rgb",
+    "values": [
+     245,
+     158,
+     11
+    ],
+    "hex": "#F59E0B"
+   },
+   "stroke": null
+  },
+  {
+   "id": "L0/11",
+   "kind": "compound",
+   "name": "Ring",
+   "layer": "Artwork",
+   "locked": false,
+   "hidden": false,
+   "bounds": [
+    400,
+    540,
+    540,
+    400
+   ],
+   "paths": 2,
+   "fill": {
+    "type": "rgb",
+    "values": [
+     225,
+     29,
+     72
+    ],
+    "hex": "#E11D48"
+   },
+   "stroke": null
+  },
+  {
+   "id": "L0/12",
+   "kind": "path",
+   "name": "Card",
+   "layer": "Artwork",
+   "locked": false,
+   "hidden": false,
+   "bounds": [
+    40,
+    560,
+    340,
+    380
+   ],
+   "fill": {
+    "type": "rgb",
+    "values": [
+     29,
+     78,
+     216
+    ],
+    "hex": "#1D4ED8"
+   },
+   "stroke": {
+    "type": "rgb",
+    "values": [
+     17,
+     24,
+     39
+    ],
+    "hex": "#111827"
+   },
+   "strokeWidth": 4
+  },
+  {
+   "id": "L0.L0/0",
+   "kind": "path",
+   "name": "Frozen box",
+   "layer": "Artwork / Frozen",
+   "locked": true,
+   "hidden": false,
+   "bounds": [
+    680,
+    380,
+    740,
+    350
+   ],
+   "fill": {
+    "type": "rgb",
+    "values": [
+     29,
+     78,
+     216
+    ],
+    "hex": "#1D4ED8"
+   },
+   "stroke": null
+  },
+  {
+   "id": "L0.L1/0",
+   "kind": "path",
+   "name": "Detail",
+   "layer": "Artwork / Details",
+   "locked": false,
+   "hidden": false,
+   "bounds": [
+    40,
+    360,
+    200,
+    340
+   ],
+   "fill": {
+    "type": "rgb",
+    "values": [
+     225,
+     29,
+     72
+    ],
+    "hex": "#E11D48"
+   },
+   "stroke": {
+    "type": "rgb",
+    "values": [
+     29,
+     78,
+     216
+    ],
+    "hex": "#1D4ED8"
+   },
+   "strokeWidth": 2
+  },
+  {
+   "id": "L1/0",
+   "kind": "placed",
+   "name": "Photo",
+   "layer": "Background",
+   "locked": false,
+   "hidden": false,
+   "bounds": [
+    560,
+    180,
+    720,
+    60
+   ]
+  },
+  {
+   "id": "L1/1",
+   "kind": "path",
+   "name": "Paper",
+   "layer": "Background",
+   "locked": false,
+   "hidden": false,
+   "bounds": [
+    0,
+    600,
+    800,
+    0
+   ],
+   "fill": {
+    "type": "rgb",
+    "values": [
+     245,
+     240,
+     230
+    ],
+    "hex": "#F5F0E6"
+   },
+   "stroke": null
+  }
+ ],
+ "gradients": [
+  {
+   "name": "White, Black",
+   "type": "linear",
+   "stops": [
+    {
+     "ramp": 0,
+     "mid": 50,
+     "opacity": 100,
+     "color": {
+      "type": "rgb",
+      "values": [
+       255,
+       255,
+       255
+      ],
+      "hex": "#FFFFFF"
+     }
+    },
+    {
+     "ramp": 100,
+     "mid": 50,
+     "opacity": 100,
+     "color": {
+      "type": "rgb",
+      "values": [
+       0,
+       0,
+       0
+      ],
+      "hex": "#000000"
+     }
+    }
+   ]
+  },
+  {
+   "name": "Sky",
+   "type": "linear",
+   "stops": [
+    {
+     "ramp": 0,
+     "mid": 59.5506,
+     "opacity": 100,
+     "color": {
+      "type": "rgb",
+      "values": [
+       204,
+       224,
+       244
+      ],
+      "hex": "#CCE0F4"
+     }
+    },
+    {
+     "ramp": 56.7416,
+     "mid": 50,
+     "opacity": 100,
+     "color": {
+      "type": "rgb",
+      "values": [
+       30,
+       156,
+       215
+      ],
+      "hex": "#1E9CD7"
+     }
+    },
+    {
+     "ramp": 86.5168,
+     "mid": 50,
+     "opacity": 100,
+     "color": {
+      "type": "rgb",
+      "values": [
+       0,
+       117,
+       190
+      ],
+      "hex": "#0075BE"
+     }
+    },
+    {
+     "ramp": 99.4382,
+     "mid": 50,
+     "opacity": 100,
+     "color": {
+      "type": "rgb",
+      "values": [
+       0,
+       91,
+       151
+      ],
+      "hex": "#005B97"
+     }
+    }
+   ]
+  },
+  {
+   "name": "Orchid",
+   "type": "linear",
+   "stops": [
+    {
+     "ramp": 0,
+     "mid": 46.3356,
+     "opacity": 100,
+     "color": {
+      "type": "rgb",
+      "values": [
+       255,
+       123,
+       172
+      ],
+      "hex": "#FF7BAC"
+     }
+    },
+    {
+     "ramp": 100,
+     "mid": 50,
+     "opacity": 0,
+     "color": {
+      "type": "rgb",
+      "values": [
+       255,
+       123,
+       172
+      ],
+      "hex": "#FF7BAC"
+     }
+    }
+   ]
+  },
+  {
+   "name": "Summer",
+   "type": "radial",
+   "stops": [
+    {
+     "ramp": 0,
+     "mid": 28,
+     "opacity": 100,
+     "color": {
+      "type": "rgb",
+      "values": [
+       255,
+       255,
+       255
+      ],
+      "hex": "#FFFFFF"
+     }
+    },
+    {
+     "ramp": 100,
+     "mid": 50,
+     "opacity": 100,
+     "color": {
+      "type": "rgb",
+      "values": [
+       255,
+       147,
+       30
+      ],
+      "hex": "#FF931E"
+     }
+    }
+   ]
+  },
+  {
+   "name": "Golden Ring",
+   "type": "radial",
+   "stops": [
+    {
+     "ramp": 73.8792,
+     "mid": 80.4707,
+     "opacity": 0,
+     "color": {
+      "type": "rgb",
+      "values": [
+       255,
+       255,
+       255
+      ],
+      "hex": "#FFFFFF"
+     }
+    },
+    {
+     "ramp": 81.6546,
+     "mid": 50,
+     "opacity": 50,
+     "color": {
+      "type": "rgb",
+      "values": [
+       255,
+       255,
+       255
+      ],
+      "hex": "#FFFFFF"
+     }
+    },
+    {
+     "ramp": 82.3054,
+     "mid": 50,
+     "opacity": 100,
+     "color": {
+      "type": "rgb",
+      "values": [
+       219,
+       192,
+       31
+      ],
+      "hex": "#DBC01F"
+     }
+    },
+    {
+     "ramp": 83.0383,
+     "mid": 50,
+     "opacity": 100,
+     "color": {
+      "type": "rgb",
+      "values": [
+       241,
+       220,
+       58
+      ],
+      "hex": "#F1DC3A"
+     }
+    },
+    {
+     "ramp": 83.5009,
+     "mid": 50,
+     "opacity": 100,
+     "color": {
+      "type": "rgb",
+      "values": [
+       245,
+       225,
+       63
+      ],
+      "hex": "#F5E13F"
+     }
+    },
+    {
+     "ramp": 83.8579,
+     "mid": 27.8339,
+     "opacity": 100,
+     "color": {
+      "type": "rgb",
+      "values": [
+       219,
+       192,
+       31
+      ],
+      "hex": "#DBC01F"
+     }
+    },
+    {
+     "ramp": 99.929,
+     "mid": 50,
+     "opacity": 100,
+     "color": {
+      "type": "rgb",
+      "values": [
+       255,
+       255,
+       255
+      ],
+      "hex": "#FFFFFF"
+     }
+    }
+   ]
+  },
+  {
+   "name": "Test Sky",
+   "type": "linear",
+   "stops": [
+    {
+     "ramp": 0,
+     "mid": 50,
+     "opacity": 100,
+     "color": {
+      "type": "rgb",
+      "values": [
+       14,
+       165,
+       233
+      ],
+      "hex": "#0EA5E9"
+     }
+    },
+    {
+     "ramp": 100,
+     "mid": 50,
+     "opacity": 100,
+     "color": {
+      "type": "rgb",
+      "values": [
+       139,
+       92,
+       246
+      ],
+      "hex": "#8B5CF6"
+     }
+    }
+   ]
+  }
+ ],
+ "spots": [
+  {
+   "name": "Brand Green",
+   "kind": "global",
+   "color": {
+    "type": "rgb",
+    "values": [
+     22,
+     163,
+     74
+    ],
+    "hex": "#16A34A"
+   }
+  },
+  {
+   "name": "Spot Orange",
+   "kind": "spot",
+   "color": {
+    "type": "rgb",
+    "values": [
+     249,
+     115,
+     22
+    ],
+    "hex": "#F97316"
+   }
+  },
+  {
+   "name": "[Registration]",
+   "kind": "registration",
+   "color": {
+    "type": "rgb",
+    "values": [
+     0,
+     0,
+     0
+    ],
+    "hex": "#000000"
+   }
+  }
+ ],
+ "swatches": [
+  {
+   "name": "[None]",
+   "color": null
+  },
+  {
+   "name": "[Registration]",
+   "color": {
+    "type": "registration",
+    "swatch": "[Registration]",
+    "tint": 100,
+    "hex": "#000000",
+    "base": {
+     "type": "rgb",
+     "values": [
+      0,
+      0,
+      0
+     ],
+     "hex": "#000000"
+    }
+   }
+  },
+  {
+   "name": "White",
+   "color": {
+    "type": "rgb",
+    "values": [
+     255,
+     255,
+     255
+    ],
+    "hex": "#FFFFFF"
+   }
+  },
+  {
+   "name": "Black",
+   "color": {
+    "type": "rgb",
+    "values": [
+     0,
+     0,
+     0
+    ],
+    "hex": "#000000"
+   }
+  },
+  {
+   "name": "RGB Red",
+   "color": {
+    "type": "rgb",
+    "values": [
+     255,
+     0,
+     0
+    ],
+    "hex": "#FF0000"
+   }
+  },
+  {
+   "name": "RGB Yellow",
+   "color": {
+    "type": "rgb",
+    "values": [
+     255,
+     255,
+     0
+    ],
+    "hex": "#FFFF00"
+   }
+  },
+  {
+   "name": "RGB Green",
+   "color": {
+    "type": "rgb",
+    "values": [
+     0,
+     255,
+     0
+    ],
+    "hex": "#00FF00"
+   }
+  },
+  {
+   "name": "RGB Cyan",
+   "color": {
+    "type": "rgb",
+    "values": [
+     0,
+     255,
+     255
+    ],
+    "hex": "#00FFFF"
+   }
+  },
+  {
+   "name": "RGB Blue",
+   "color": {
+    "type": "rgb",
+    "values": [
+     0,
+     0,
+     255
+    ],
+    "hex": "#0000FF"
+   }
+  },
+  {
+   "name": "RGB Magenta",
+   "color": {
+    "type": "rgb",
+    "values": [
+     255,
+     0,
+     255
+    ],
+    "hex": "#FF00FF"
+   }
+  },
+  {
+   "name": "R=193 G=39 B=45",
+   "color": {
+    "type": "rgb",
+    "values": [
+     193,
+     39,
+     45
+    ],
+    "hex": "#C1272D"
+   }
+  },
+  {
+   "name": "R=237 G=28 B=36",
+   "color": {
+    "type": "rgb",
+    "values": [
+     237,
+     28,
+     36
+    ],
+    "hex": "#ED1C24"
+   }
+  },
+  {
+   "name": "R=241 G=90 B=36",
+   "color": {
+    "type": "rgb",
+    "values": [
+     241,
+     90,
+     36
+    ],
+    "hex": "#F15A24"
+   }
+  },
+  {
+   "name": "R=247 G=147 B=30",
+   "color": {
+    "type": "rgb",
+    "values": [
+     247,
+     147,
+     30
+    ],
+    "hex": "#F7931E"
+   }
+  },
+  {
+   "name": "R=251 G=176 B=59",
+   "color": {
+    "type": "rgb",
+    "values": [
+     251,
+     176,
+     59
+    ],
+    "hex": "#FBB03B"
+   }
+  },
+  {
+   "name": "R=252 G=238 B=33",
+   "color": {
+    "type": "rgb",
+    "values": [
+     252,
+     238,
+     33
+    ],
+    "hex": "#FCEE21"
+   }
+  },
+  {
+   "name": "R=217 G=224 B=33",
+   "color": {
+    "type": "rgb",
+    "values": [
+     217,
+     224,
+     33
+    ],
+    "hex": "#D9E021"
+   }
+  },
+  {
+   "name": "R=140 G=198 B=63",
+   "color": {
+    "type": "rgb",
+    "values": [
+     140,
+     198,
+     63
+    ],
+    "hex": "#8CC63F"
+   }
+  },
+  {
+   "name": "R=57 G=181 B=74",
+   "color": {
+    "type": "rgb",
+    "values": [
+     57,
+     181,
+     74
+    ],
+    "hex": "#39B54A"
+   }
+  },
+  {
+   "name": "R=0 G=146 B=69",
+   "color": {
+    "type": "rgb",
+    "values": [
+     0,
+     146,
+     69
+    ],
+    "hex": "#009245"
+   }
+  },
+  {
+   "name": "R=0 G=104 B=55",
+   "color": {
+    "type": "rgb",
+    "values": [
+     0,
+     104,
+     55
+    ],
+    "hex": "#006837"
+   }
+  },
+  {
+   "name": "R=34 G=181 B=115",
+   "color": {
+    "type": "rgb",
+    "values": [
+     34,
+     181,
+     115
+    ],
+    "hex": "#22B573"
+   }
+  },
+  {
+   "name": "R=0 G=169 B=157",
+   "color": {
+    "type": "rgb",
+    "values": [
+     0,
+     169,
+     157
+    ],
+    "hex": "#00A99D"
+   }
+  },
+  {
+   "name": "R=41 G=171 B=226",
+   "color": {
+    "type": "rgb",
+    "values": [
+     41,
+     171,
+     226
+    ],
+    "hex": "#29ABE2"
+   }
+  },
+  {
+   "name": "R=0 G=113 B=188",
+   "color": {
+    "type": "rgb",
+    "values": [
+     0,
+     113,
+     188
+    ],
+    "hex": "#0071BC"
+   }
+  },
+  {
+   "name": "R=46 G=49 B=146",
+   "color": {
+    "type": "rgb",
+    "values": [
+     46,
+     49,
+     146
+    ],
+    "hex": "#2E3192"
+   }
+  },
+  {
+   "name": "R=27 G=20 B=100",
+   "color": {
+    "type": "rgb",
+    "values": [
+     27,
+     20,
+     100
+    ],
+    "hex": "#1B1464"
+   }
+  },
+  {
+   "name": "R=102 G=45 B=145",
+   "color": {
+    "type": "rgb",
+    "values": [
+     102,
+     45,
+     145
+    ],
+    "hex": "#662D91"
+   }
+  },
+  {
+   "name": "R=147 G=39 B=143",
+   "color": {
+    "type": "rgb",
+    "values": [
+     147,
+     39,
+     143
+    ],
+    "hex": "#93278F"
+   }
+  },
+  {
+   "name": "R=158 G=0 B=93",
+   "color": {
+    "type": "rgb",
+    "values": [
+     158,
+     0,
+     93
+    ],
+    "hex": "#9E005D"
+   }
+  },
+  {
+   "name": "R=212 G=20 B=90",
+   "color": {
+    "type": "rgb",
+    "values": [
+     212,
+     20,
+     90
+    ],
+    "hex": "#D4145A"
+   }
+  },
+  {
+   "name": "R=237 G=30 B=121",
+   "color": {
+    "type": "rgb",
+    "values": [
+     237,
+     30,
+     121
+    ],
+    "hex": "#ED1E79"
+   }
+  },
+  {
+   "name": "R=199 G=178 B=153",
+   "color": {
+    "type": "rgb",
+    "values": [
+     199,
+     178,
+     153
+    ],
+    "hex": "#C7B299"
+   }
+  },
+  {
+   "name": "R=153 G=134 B=117",
+   "color": {
+    "type": "rgb",
+    "values": [
+     153,
+     134,
+     117
+    ],
+    "hex": "#998675"
+   }
+  },
+  {
+   "name": "R=115 G=99 B=87",
+   "color": {
+    "type": "rgb",
+    "values": [
+     115,
+     99,
+     87
+    ],
+    "hex": "#736357"
+   }
+  },
+  {
+   "name": "R=83 G=71 B=65",
+   "color": {
+    "type": "rgb",
+    "values": [
+     83,
+     71,
+     65
+    ],
+    "hex": "#534741"
+   }
+  },
+  {
+   "name": "R=198 G=156 B=109",
+   "color": {
+    "type": "rgb",
+    "values": [
+     198,
+     156,
+     109
+    ],
+    "hex": "#C69C6D"
+   }
+  },
+  {
+   "name": "R=166 G=124 B=82",
+   "color": {
+    "type": "rgb",
+    "values": [
+     166,
+     124,
+     82
+    ],
+    "hex": "#A67C52"
+   }
+  },
+  {
+   "name": "R=140 G=98 B=57",
+   "color": {
+    "type": "rgb",
+    "values": [
+     140,
+     98,
+     57
+    ],
+    "hex": "#8C6239"
+   }
+  },
+  {
+   "name": "R=117 G=76 B=36",
+   "color": {
+    "type": "rgb",
+    "values": [
+     117,
+     76,
+     36
+    ],
+    "hex": "#754C24"
+   }
+  },
+  {
+   "name": "R=96 G=56 B=19",
+   "color": {
+    "type": "rgb",
+    "values": [
+     96,
+     56,
+     19
+    ],
+    "hex": "#603813"
+   }
+  },
+  {
+   "name": "R=66 G=33 B=11",
+   "color": {
+    "type": "rgb",
+    "values": [
+     66,
+     33,
+     11
+    ],
+    "hex": "#42210B"
+   }
+  },
+  {
+   "name": "White, Black",
+   "color": {
+    "type": "gradient",
+    "gradient": "White, Black"
+   }
+  },
+  {
+   "name": "Sky",
+   "color": {
+    "type": "gradient",
+    "gradient": "Sky"
+   }
+  },
+  {
+   "name": "Orchid",
+   "color": {
+    "type": "gradient",
+    "gradient": "Orchid"
+   }
+  },
+  {
+   "name": "Summer",
+   "color": {
+    "type": "gradient",
+    "gradient": "Summer"
+   }
+  },
+  {
+   "name": "Golden Ring",
+   "color": {
+    "type": "gradient",
+    "gradient": "Golden Ring"
+   }
+  },
+  {
+   "name": "Jive",
+   "color": {
+    "type": "pattern",
+    "pattern": "Jive"
+   }
+  },
+  {
+   "name": "Alyssa",
+   "color": {
+    "type": "pattern",
+    "pattern": "Alyssa"
+   }
+  },
+  {
+   "name": "Test Sky",
+   "color": {
+    "type": "gradient",
+    "gradient": "Test Sky"
+   }
+  },
+  {
+   "name": "Brand Green",
+   "color": {
+    "type": "global",
+    "swatch": "Brand Green",
+    "tint": 100,
+    "hex": "#16A34A",
+    "base": {
+     "type": "rgb",
+     "values": [
+      22,
+      163,
+      74
+     ],
+     "hex": "#16A34A"
+    }
+   }
+  },
+  {
+   "name": "Spot Orange",
+   "color": {
+    "type": "spot",
+    "swatch": "Spot Orange",
+    "tint": 100,
+    "hex": "#F97316",
+    "base": {
+     "type": "rgb",
+     "values": [
+      249,
+      115,
+      22
+     ],
+     "hex": "#F97316"
+    }
+   }
+  },
+  {
+   "name": "R=0 G=0 B=0",
+   "color": {
+    "type": "rgb",
+    "values": [
+     0,
+     0,
+     0
+    ],
+    "hex": "#000000"
+   }
+  },
+  {
+   "name": "R=26 G=26 B=26",
+   "color": {
+    "type": "rgb",
+    "values": [
+     26,
+     26,
+     26
+    ],
+    "hex": "#1A1A1A"
+   }
+  },
+  {
+   "name": "R=51 G=51 B=51",
+   "color": {
+    "type": "rgb",
+    "values": [
+     51,
+     51,
+     51
+    ],
+    "hex": "#333333"
+   }
+  },
+  {
+   "name": "R=77 G=77 B=77",
+   "color": {
+    "type": "rgb",
+    "values": [
+     77,
+     77,
+     77
+    ],
+    "hex": "#4D4D4D"
+   }
+  },
+  {
+   "name": "R=102 G=102 B=102",
+   "color": {
+    "type": "rgb",
+    "values": [
+     102,
+     102,
+     102
+    ],
+    "hex": "#666666"
+   }
+  },
+  {
+   "name": "R=128 G=128 B=128",
+   "color": {
+    "type": "rgb",
+    "values": [
+     128,
+     128,
+     128
+    ],
+    "hex": "#808080"
+   }
+  },
+  {
+   "name": "R=153 G=153 B=153",
+   "color": {
+    "type": "rgb",
+    "values": [
+     153,
+     153,
+     153
+    ],
+    "hex": "#999999"
+   }
+  },
+  {
+   "name": "R=179 G=179 B=179",
+   "color": {
+    "type": "rgb",
+    "values": [
+     179,
+     179,
+     179
+    ],
+    "hex": "#B3B3B3"
+   }
+  },
+  {
+   "name": "R=204 G=204 B=204",
+   "color": {
+    "type": "rgb",
+    "values": [
+     204,
+     204,
+     204
+    ],
+    "hex": "#CCCCCC"
+   }
+  },
+  {
+   "name": "R=230 G=230 B=230",
+   "color": {
+    "type": "rgb",
+    "values": [
+     230,
+     230,
+     230
+    ],
+    "hex": "#E6E6E6"
+   }
+  },
+  {
+   "name": "R=242 G=242 B=242",
+   "color": {
+    "type": "rgb",
+    "values": [
+     242,
+     242,
+     242
+    ],
+    "hex": "#F2F2F2"
+   }
+  },
+  {
+   "name": "R=63 G=169 B=245",
+   "color": {
+    "type": "rgb",
+    "values": [
+     63,
+     169,
+     245
+    ],
+    "hex": "#3FA9F5"
+   }
+  },
+  {
+   "name": "R=122 G=201 B=67",
+   "color": {
+    "type": "rgb",
+    "values": [
+     122,
+     201,
+     67
+    ],
+    "hex": "#7AC943"
+   }
+  },
+  {
+   "name": "R=255 G=147 B=30",
+   "color": {
+    "type": "rgb",
+    "values": [
+     255,
+     147,
+     30
+    ],
+    "hex": "#FF931E"
+   }
+  },
+  {
+   "name": "R=255 G=29 B=37",
+   "color": {
+    "type": "rgb",
+    "values": [
+     255,
+     29,
+     37
+    ],
+    "hex": "#FF1D25"
+   }
+  },
+  {
+   "name": "R=255 G=123 B=172",
+   "color": {
+    "type": "rgb",
+    "values": [
+     255,
+     123,
+     172
+    ],
+    "hex": "#FF7BAC"
+   }
+  },
+  {
+   "name": "R=189 G=204 B=212",
+   "color": {
+    "type": "rgb",
+    "values": [
+     189,
+     204,
+     212
+    ],
+    "hex": "#BDCCD4"
+   }
+  }
+ ],
+ "counts": {
+  "layers": 2,
+  "artboards": 2,
+  "pageItems": 23,
+  "pathItems": 18,
+  "compoundPathItems": 1,
+  "groupItems": 2,
+  "textFrames": 1,
+  "placedItems": 1,
+  "rasterItems": 0,
+  "meshItems": 0,
+  "symbolItems": 0,
+  "pluginItems": 0,
+  "graphItems": 0,
+  "legacyTextItems": 0,
+  "nonNativeItems": 0,
+  "gradients": 6,
+  "spots": 3,
+  "swatches": 69,
+  "symbols": 15,
+  "stories": 1
+ },
+ "notes": []
+}

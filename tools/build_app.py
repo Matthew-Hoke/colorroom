@@ -8,6 +8,7 @@ the .exe needs the files next to it). No Python installation is needed to run it
 
 from __future__ import annotations
 
+import os
 import shutil
 import subprocess
 import sys
@@ -67,6 +68,16 @@ def main() -> int:
         "--icon", str(icon),
         "--paths", str(ROOT / "src"),
         "--hidden-import", "PySide6.QtSvg",
+        "--collect-all", "pypdfium2",
+        "--collect-all", "pypdfium2_raw",
+        "--collect-submodules", "psd_tools",
+        # The links to Photoshop, Illustrator and InDesign: their scripts, and pywin32 (COM).
+        "--add-data", f"{ROOT / 'src' / 'colorroom' / 'core' / 'bridges' / 'scripts'}{os.pathsep}colorroom/core/bridges/scripts",
+        "--collect-submodules", "colorroom.core.bridges",
+        "--hidden-import", "colorroom.core.app_links",
+        "--hidden-import", "win32com.client",
+        "--hidden-import", "pythoncom",
+        "--hidden-import", "pywintypes",
         "--exclude-module", "tkinter",
         "--exclude-module", "pytest",
         "--specpath", str(PACKAGING),
@@ -89,6 +100,15 @@ def main() -> int:
     check = subprocess.run([str(app), "--screenshot", str(proof)], cwd=ROOT, timeout=180)
     if check.returncode != 0 or not proof.exists():
         print("The packaged app did not pass its start-up check.")
+        return 1
+    inside = app.parent / "_internal"
+    scripts = sorted(path.name for path in (inside / "colorroom" / "core" / "bridges" / "scripts").glob("*.jsx"))
+    wanted = sorted(path.name for path in (ROOT / "src" / "colorroom" / "core" / "bridges" / "scripts").glob("*.jsx"))
+    if scripts != wanted:
+        print(f"The app is missing the design-program scripts: {sorted(set(wanted) - set(scripts))}")
+        return 1
+    if not list(inside.rglob("pythoncom*.dll")) or not list(inside.rglob("pywintypes*.dll")):
+        print("The app is missing pywin32, so it could not drive Photoshop, Illustrator or InDesign.")
         return 1
     megabytes = sum(path.stat().st_size for path in app.parent.rglob("*") if path.is_file()) / 1e6
     print(f"\nBuilt and checked {app}\nFolder size: {megabytes:.0f} MB")

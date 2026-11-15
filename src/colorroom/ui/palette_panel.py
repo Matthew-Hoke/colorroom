@@ -31,6 +31,7 @@ class PalettePanel(Panel):
     picksCleared = Signal()
     copyRequested = Signal()
     exportRequested = Signal(str)  # a key of PALETTE_FORMATS
+    keepRequested = Signal()  # add these colors to the My palette tab
 
     def __init__(self, parent: Optional[QWidget] = None) -> None:
         super().__init__(
@@ -98,15 +99,18 @@ class PalettePanel(Panel):
         self.copy_button = QPushButton("Copy palette")
         self.copy_button.setProperty("primary", True)
         self.copy_button.setToolTip("Copy the HEX codes, separated by commas")
-        self.export_button = QPushButton("Export…")
+        self.export_button = QPushButton("Export palette…")
         self.export_button.setToolTip("Save the palette for CSS, Adobe apps, GIMP and more")
         menu = QMenu(self.export_button)
         for key, (label, extension) in PALETTE_FORMATS.items():
             action = menu.addAction(f"{label}  ({extension})")
             action.triggered.connect(lambda _=False, k=key: self.exportRequested.emit(k))
         self.export_button.setMenu(menu)
+        self.keep_button = QPushButton("Add to My palette")
+        self.keep_button.setToolTip("Keep these colors on the My palette tab, where you can check and export them")
         actions.addWidget(self.copy_button)
         actions.addWidget(self.export_button)
+        actions.addWidget(self.keep_button)
         actions.addStretch(1)
         self.body.addLayout(actions)
 
@@ -114,6 +118,7 @@ class PalettePanel(Panel):
         self.size.currentIndexChanged.connect(self._changed)
         self.theme.currentIndexChanged.connect(self._changed)
         self.copy_button.clicked.connect(self.copyRequested)
+        self.keep_button.clicked.connect(self.keepRequested)
         self.grid.swatchHovered.connect(self.swatchHovered)
         self.grid.swatchClicked.connect(self.swatchClicked)
         self._sync_options()
@@ -143,6 +148,7 @@ class PalettePanel(Panel):
         if not ready:
             self.copy_button.setEnabled(False)
             self.export_button.setEnabled(False)
+            self.keep_button.setEnabled(False)
 
     def clear(self) -> None:
         self.note.setText("")
@@ -159,6 +165,7 @@ class PalettePanel(Panel):
         has_colors = bool(palette.entries)
         self.copy_button.setEnabled(has_colors)
         self.export_button.setEnabled(has_colors)
+        self.keep_button.setEnabled(has_colors)
 
     def _show_picks(self, picks: Sequence[str]) -> None:
         self.picks.clear()
